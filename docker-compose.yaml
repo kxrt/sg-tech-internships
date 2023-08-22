@@ -4,4 +4,13 @@ services:
     build: 
       context: ./backend
     ports:
-      - "8080:8080"
+      - "8000:8080"
+
+  # frontend service
+  frontend:
+    build: 
+      context: ./frontend
+    ports:
+      - "8080:5173"
+    depends_on:
+      - backend
