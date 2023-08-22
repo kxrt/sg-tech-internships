@@ -16,12 +16,12 @@ func setupRouter() *gin.Engine {
 	r := gin.Default()
 
 	// health check
-	r.GET("/ping", func(c *gin.Context) {
+	r.GET("/api/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 
 	// get table data
-	r.GET("/internships", internships)
+	r.GET("/api/internships", internships)
 
 	return r
 }
