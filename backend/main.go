@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,21 +15,35 @@ func main() {
 func setupRouter() *gin.Engine {
 	r := gin.Default()
 
-	// auth middleware
-	// authorized := r.Group("/api", gin.BasicAuth(gin.Accounts{
-	// 	os.Getenv("key"): os.Getenv("secret"),
-	// }))
-
 	// health check
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 
 	// get table data
-	r.GET("/internships", func(c *gin.Context) {
-		// TODO: parse md data
-		c.JSON(http.StatusOK, gin.H{"status": "ok"})
-	})
+	r.GET("/internships", internships)
 
 	return r
+}
+
+func internships(c *gin.Context) {
+	data, err := fetchData()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data fetch failed"})
+		return
+	}
+
+	summer, offcycle, err := extractTables(data)
+	if err != nil {
+		log.Default().Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data extraction failed"})
+		return
+	}
+
+	c.JSON(http.StatusOK,
+		gin.H{"data": map[string][]Internship{
+			"summer":   summer,
+			"offcycle": offcycle},
+		},
+	)
 }
