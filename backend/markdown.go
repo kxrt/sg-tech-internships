@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// curl data from github
+// fetch data from github
 func fetchData() (string, error) {
 	url := "https://raw.githubusercontent.com/kxrt/Singapore-Summer2024-TechInternships/main/README.md"
 

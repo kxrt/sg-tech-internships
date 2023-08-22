@@ -1,4 +1,5 @@
 services:
+  # service to get intership data
   backend:
     build: 
       context: ./backend
