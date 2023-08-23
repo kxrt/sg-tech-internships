@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { InternshipList } from "./InternshipList";
+import { SearchBar } from "./SearchBar";
 
 export type Internship = {
   company: string;
@@ -14,6 +15,7 @@ export function Internships() {
   const [offcycleInternships, setOffcycleInternships] = useState<Internship[]>(
     []
   );
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
     axios.get("/api/internships").then((response) => {
@@ -25,8 +27,17 @@ export function Internships() {
 
   return (
     <>
-      <InternshipList internships={summerInternships} title="Summer" />
-      <InternshipList internships={offcycleInternships} title="Offcycle" />
+      <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <InternshipList
+        internships={summerInternships}
+        searchQuery={searchQuery}
+        title="Summer"
+      />
+      <InternshipList
+        internships={offcycleInternships}
+        searchQuery={searchQuery}
+        title="Offcycle"
+      />
     </>
   );
 }
