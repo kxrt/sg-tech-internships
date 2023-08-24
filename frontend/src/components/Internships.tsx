@@ -19,7 +19,6 @@ export function Internships() {
 
   useEffect(() => {
     axios.get("/api/internships").then((response) => {
-      console.log(response);
       setSummerInternships(response.data.data.summer);
       setOffcycleInternships(response.data.data.offcycle);
     });
@@ -27,12 +26,15 @@ export function Internships() {
 
   return (
     <>
-      <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <div className="top-interactive">
+        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      </div>
       <InternshipList
         internships={summerInternships}
         searchQuery={searchQuery}
         title="Summer"
       />
+      <br />
       <InternshipList
         internships={offcycleInternships}
         searchQuery={searchQuery}

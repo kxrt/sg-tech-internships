@@ -5,11 +5,18 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	// load env variables
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	r := setupRouter()
-	r.Run(":8080")
+	r.Run(":8000")
 }
 
 func setupRouter() *gin.Engine {
@@ -21,32 +28,10 @@ func setupRouter() *gin.Engine {
 	})
 
 	// get table data
-	r.GET("/api/internships", internships)
+	r.GET("/api/internships", getInternships)
+
+	// post internship role
+	r.POST("/api/internships", postInternship)
 
 	return r
-}
-
-func internships(c *gin.Context) {
-	// fetch data from github
-	data, err := fetchData()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data fetch failed"})
-		return
-	}
-
-	// extract table data from markdown
-	summer, offcycle, err := extractTables(data)
-	if err != nil {
-		log.Default().Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data extraction failed"})
-		return
-	}
-
-	// return data
-	c.JSON(http.StatusOK,
-		gin.H{"data": map[string][]Internship{
-			"summer":   summer,
-			"offcycle": offcycle},
-		},
-	)
 }

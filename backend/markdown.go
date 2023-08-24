@@ -57,6 +57,7 @@ func extractTables(data string) ([]Internship, []Internship, error) {
 		// application links are in the form [Open](link)
 		link := strings.TrimSuffix(strings.TrimPrefix(strings.TrimSpace(data[2]), "[Open]("), ")")
 
+		// create internship object
 		internship := Internship{
 			Company:   strings.TrimSpace(data[0]),
 			Role:      strings.ReplaceAll(strings.TrimSpace(data[1]), "\\", ""),

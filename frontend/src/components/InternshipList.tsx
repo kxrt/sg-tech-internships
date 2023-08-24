@@ -22,8 +22,8 @@ export function InternshipList({
                 .includes(searchQuery.toLowerCase()) ||
               internship.role.toLowerCase().includes(searchQuery.toLowerCase())
           )
-          .map((internship) => {
-            return <InternshipBox internship={internship} />;
+          .map((internship, idx) => {
+            return <InternshipBox internship={internship} key={idx} />;
           })}
       </div>
     </>

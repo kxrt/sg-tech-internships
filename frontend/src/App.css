@@ -4,3 +4,237 @@
   padding: 2rem;
   text-align: center;
 }
+
+.internship-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2em;
+}
+
+.internship-box-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 40%;
+  padding-block: 0.5%;
+  padding-inline: 2%;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  transition: 0.2s;
+
+  @media screen and (max-width: 960px) {
+    width: 90%;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+.internship-box-wrapper:hover {
+  border: 1px solid #6161ff;
+}
+
+.internship-box-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  white-space: nowrap;
+  width: 80%;
+  transition: 0.2s;
+
+  @media screen and (max-width: 960px) {
+    white-space: normal;
+    align-items: center;
+  }
+}
+
+.internship-role {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 70%;
+  text-align: left;
+
+  @media screen and (max-width: 960px) {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.internship-box-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.internship-apply-button {
+  @media screen and (max-width: 960px) {
+    margin-bottom: 1.5em;
+  }
+}
+
+.search-bar-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.2s;
+  width: 50%;
+  margin-bottom: 1.5%;
+
+  @media screen and (max-width: 960px) {
+    width: 100%;
+  }
+}
+
+.search-bar-input {
+  width: 100%;
+  border-radius: 10px;
+  border: 2px solid #e0e0e0;
+  padding-block: 1%;
+  padding-inline: 2%;
+  outline: none;
+  font-size: 1.2rem;
+  font-weight: 500;
+  background-color: transparent;
+
+  @media screen and (max-width: 960px) {
+    width: 80%;
+  }
+}
+
+.search-bar-input:hover,
+.search-bar-input:not(:placeholder-shown) {
+  border: 2px solid #6161ff;
+}
+
+.top-interactive {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-button {
+  margin-top: 2%;
+  background-color: rgb(76, 175, 80);
+  box-shadow: 0px 10px 15px rgba(76, 175, 80, 0.25);
+
+  @media screen and (max-width: 960px) {
+    margin-top: 4%;
+  }
+}
+
+.add-button:hover {
+  border-color: #46a049;
+  background-color: #46a049;
+}
+
+.add-button:focus,
+.add-button:focus-visible {
+  border: 4px auto rgba(76, 175, 80, 0.25);
+}
+
+.modal {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fbfbfb;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  padding: 2%;
+  width: 50%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: 0.2s;
+  box-shadow: 0px 10px 15px rgba(97, 97, 255, 0.1);
+
+  @media screen and (max-width: 960px) {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+
+  @media screen and (max-width: 960px) {
+    width: 90%;
+  }
+}
+
+.modal-form {
+  width: 100%;
+}
+
+.close {
+  align-self: flex-end;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.form-input {
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  padding-block: 1%;
+  padding-inline: 2%;
+  outline: none;
+  font-size: 1rem;
+  font-weight: 500;
+  background-color: transparent;
+  width: 60%;
+
+  @media screen and (max-width: 960px) {
+    width: 90%;
+  }
+}
+
+.form-input:hover,
+.form-input:not(:placeholder-shown) {
+  border: 1px solid #6161ff;
+}
+
+.form-input:focus,
+.form-input:focus-visible {
+  border: 1px auto rgba(97, 97, 255, 0.25);
+}
+
+.form-checkbox {
+  size: 1.5em;
+}
+
+.form-input-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+  margin: 1.5em 0;
+  gap: 0.5em;
+  width: 100%;
+
+  @media screen and (max-width: 960px) {
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 2em 0;
+  }
+}
+
+.form-radio-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+  width: 100%;
+}
