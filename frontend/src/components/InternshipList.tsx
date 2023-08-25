@@ -14,8 +14,10 @@ export function InternshipList({
 }) {
   return (
     <>
-      <h2 style={{ textAlign: "center", fontSize: "28px" }}>{title}</h2>
-      <div className="internship-list" ref={reference}>
+      <h2 style={{ textAlign: "center", fontSize: "28px" }} ref={reference}>
+        {title}
+      </h2>
+      <div className="internship-list">
         {internships
           .filter(
             (internship) =>

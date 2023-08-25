@@ -38,6 +38,10 @@ export function ModalForm({
           <span className="close" onClick={() => setOpenModal(false)}>
             &times;
           </span>
+          <p>
+            Submitting this form will create a request on GitHub to add an
+            opportunity to the list below. Processing may take a few hours.
+          </p>
           <form className="modal-form" onSubmit={handleSubmit}>
             <div className="form-input-group">
               <label htmlFor="company">Company</label>
