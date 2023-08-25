@@ -58,11 +58,11 @@ func postInternship(c *gin.Context) {
 
 func createIssue(internship InternshipData) error {
 	// create issue body
-	body := fmt.Sprintf("> Automated submission from website for %s\n\n", internship.Company)
+	body := fmt.Sprintf("> Automated submission for %s\n\n", internship.Company)
 	if internship.IsSummer {
 		body += "Summer\n"
 	} else {
-		body = "Offcycle\n"
+		body += "Offcycle\n"
 	}
 	body += fmt.Sprintf("```| %s | %s | [Open](%s) | %s |```", internship.Company, internship.Role, internship.Link, time.Now().Format("02 Jan 2006"))
 

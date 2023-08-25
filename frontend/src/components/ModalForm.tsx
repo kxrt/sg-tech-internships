@@ -78,7 +78,12 @@ export function ModalForm({
             </div>
             <div className="form-select-group">
               <label htmlFor="isSummer">Type</label>
-              <select name="isSummer" id="isSummer" className="form-select">
+              <select
+                name="isSummer"
+                id="isSummer"
+                className="form-select"
+                required
+              >
                 <option
                   value=""
                   disabled
