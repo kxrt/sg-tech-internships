@@ -183,7 +183,8 @@
   transition: 0.2s;
 }
 
-.form-input {
+.form-input,
+.form-select {
   border-radius: 10px;
   border: 1px solid #e0e0e0;
   padding-block: 1%;
@@ -193,6 +194,7 @@
   font-weight: 500;
   background-color: transparent;
   width: 60%;
+  box-sizing: border-box;
 
   @media screen and (max-width: 960px) {
     width: 90%;
@@ -237,4 +239,25 @@
   align-items: center;
   white-space: nowrap;
   width: 100%;
+}
+
+.form-select-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+  margin: 1.5em 0;
+  gap: 0.5em;
+  width: 100%;
+
+  @media screen and (max-width: 960px) {
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 2em 0;
+  }
+}
+
+.form-select:hover {
+  border: 1px solid #6161ff;
 }

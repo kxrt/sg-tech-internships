@@ -76,28 +76,21 @@ export function ModalForm({
                 placeholder="https://"
               />
             </div>
-            <div className="form-input-group">
-              <div className="form-radio-group">
-                <label htmlFor="isSummer">Summer</label>
-                <input
-                  type="radio"
-                  id="isSummer"
-                  name="isSummer"
-                  value="true"
-                  className="form-input"
-                  defaultChecked
-                />
-              </div>
-              <div className="form-radio-group">
-                <label htmlFor="isSummer">Off-Cycle</label>
-                <input
-                  type="radio"
-                  id="isSummer"
-                  name="isSummer"
-                  value="false"
-                  className="form-input"
-                />
-              </div>
+            <div className="form-select-group">
+              <label htmlFor="isSummer">Type</label>
+              <select name="isSummer" id="isSummer" className="form-select">
+                <option
+                  value=""
+                  disabled
+                  selected
+                  hidden
+                  style={{ color: "gray" }}
+                >
+                  Select
+                </option>
+                <option value="true">Summer</option>
+                <option value="false">Off-Cycle</option>
+              </select>
             </div>
             <button type="submit">Submit</button>
           </form>
