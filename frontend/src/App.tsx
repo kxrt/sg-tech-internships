@@ -1,35 +1,29 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import "./App.css";
+import ReactGA from "react-ga4";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ReactGA from "react-ga4";
 import { Header } from "./components/HeroHeader";
 import { Internships } from "./components/Internships";
 import { ModalForm } from "./components/ModalForm";
 
-ReactGA.initialize(import.meta.env.VITE_GA_TRACKING_ID);
-
 function App() {
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const ref = useRef<null | HTMLDivElement>(null);
 
   useMemo(() => {
     ReactGA.send({ hitType: "pageview", page: window.location.pathname });
   }, []);
 
-  const handleOpenModal = (value: boolean) => {
-    setOpenModal(value);
-    ReactGA.send({
-      hitType: "event",
-      eventCategory: "Click",
-      eventAction: "Open Modal",
-    });
+  const handleScroll = () => {
+    ref.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <>
-      {openModal && <ModalForm setOpenModal={handleOpenModal} />}
-      <Header setOpenModal={setOpenModal} />
-      <Internships />
+      {openModal && <ModalForm setOpenModal={setOpenModal} />}
+      <Header setOpenModal={setOpenModal} handleScroll={handleScroll} />
+      <Internships reference={ref} />
       <ToastContainer
         position="bottom-center"
         autoClose={4000}

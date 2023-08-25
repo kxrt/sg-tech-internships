@@ -102,8 +102,10 @@ const useStyles = createStyles((theme) => ({
 
 export function Header({
   setOpenModal,
+  handleScroll,
 }: {
   setOpenModal: (openModal: boolean) => void;
+  handleScroll: () => void;
 }) {
   const { classes } = useStyles();
 
@@ -126,8 +128,18 @@ export function Header({
         <Container p={0} size={600}>
           <Text size="lg" color="dimmed" className={classes.description}>
             Access and share the latest <b>summer 2024</b> internship
-            opportunities in Singapore! For <b>off-cycle</b> opportunities,
-            scroll down.
+            opportunities in Singapore! For <b>off-cycle</b> opportunities,{" "}
+            <a
+              onClick={handleScroll}
+              style={{
+                textDecoration: "underline",
+                color: "#6161ff",
+                cursor: "pointer",
+              }}
+            >
+              click here
+            </a>
+            .
           </Text>
         </Container>
 
@@ -140,6 +152,7 @@ export function Header({
             color="gray"
             leftIcon={<img src={Plus} />}
             onClick={() => setOpenModal(true)}
+            style={{ backgroundColor: "#6161ff", color: "white" }}
           >
             Add Opportunity
           </Button>
@@ -152,7 +165,6 @@ export function Header({
             variant="default"
             className={classes.control}
             leftIcon={<img src={GitHubIcon} />}
-            style={{ backgroundColor: "#6161ff", color: "white" }}
           >
             GitHub
           </Button>

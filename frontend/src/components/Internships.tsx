@@ -10,7 +10,11 @@ export type Internship = {
   date_added: string;
 };
 
-export function Internships() {
+export function Internships({
+  reference,
+}: {
+  reference?: React.MutableRefObject<HTMLDivElement | null> | null;
+}) {
   const [summerInternships, setSummerInternships] = useState<Internship[]>([]);
   const [offcycleInternships, setOffcycleInternships] = useState<Internship[]>(
     []
@@ -39,6 +43,7 @@ export function Internships() {
         internships={offcycleInternships}
         searchQuery={searchQuery}
         title="Offcycle"
+        reference={reference}
       />
     </>
   );
