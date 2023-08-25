@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Header } from "./components/HeroHeader";
 import { Internships } from "./components/Internships";
 import { ModalForm } from "./components/ModalForm";
+import { Footer } from "./components/Footer";
 
 function App() {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -24,6 +25,7 @@ function App() {
       {openModal && <ModalForm setOpenModal={setOpenModal} />}
       <Header setOpenModal={setOpenModal} handleScroll={handleScroll} />
       <Internships reference={ref} />
+      <Footer />
       <ToastContainer
         position="bottom-center"
         autoClose={4000}
