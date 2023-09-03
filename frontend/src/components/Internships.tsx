@@ -21,6 +21,7 @@ export function Internships({
   );
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [lastUpdated, setLastUpdated] = useState<string>("");
+  const [sortBy, setSortBy] = useState<string>("A-Z");
 
   // run once on first render
   useEffect(() => {
@@ -28,6 +29,7 @@ export function Internships({
     axios.get("/api/internships").then((response) => {
       setSummerInternships(response.data.data.summer);
       setOffcycleInternships(response.data.data.offcycle);
+      setSortBy("Date");
     });
   }, []);
 
@@ -54,12 +56,55 @@ export function Internships({
     );
   }, [summerInternships, offcycleInternships]);
 
+  // sort by date or A-Z
+  useEffect(() => {
+    const summerInternshipsCopy = [...summerInternships];
+    const offcycleInternshipsCopy = [...offcycleInternships];
+    if (sortBy == "Date") {
+      setSummerInternships(
+        summerInternshipsCopy.sort(
+          (a, b) =>
+            new Date(b.date_added).getTime() - new Date(a.date_added).getTime()
+        )
+      );
+      setOffcycleInternships(
+        offcycleInternshipsCopy.sort(
+          (a, b) =>
+            new Date(b.date_added).getTime() - new Date(a.date_added).getTime()
+        )
+      );
+    } else if (sortBy == "A-Z") {
+      setSummerInternships(
+        summerInternshipsCopy.sort((a, b) => a.company.localeCompare(b.company))
+      );
+      setOffcycleInternships(
+        offcycleInternshipsCopy.sort((a, b) =>
+          a.company.localeCompare(b.company)
+        )
+      );
+    }
+    // prevent infinite loop of updates
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sortBy]);
+
   return (
     <>
       <div className="top-interactive">
         <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       </div>
       <div>Last updated: {lastUpdated}</div>
+
+      <div className="landing-select-group">
+        <label htmlFor="sortBy">Sort By</label>
+        <select
+          className="landing-select"
+          onChange={(e) => setSortBy(e.target.value)}
+          value={sortBy}
+        >
+          <option value="Date">Date</option>
+          <option value="A-Z">A-Z</option>
+        </select>
+      </div>
       <InternshipList
         internships={summerInternships}
         searchQuery={searchQuery}
