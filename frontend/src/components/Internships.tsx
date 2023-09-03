@@ -101,7 +101,7 @@ export function Internships({
           onChange={(e) => setSortBy(e.target.value)}
           value={sortBy}
         >
-          <option value="Date">Date</option>
+          <option value="Date">Most Recent</option>
           <option value="A-Z">A-Z</option>
         </select>
       </div>
