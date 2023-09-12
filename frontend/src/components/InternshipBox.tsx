@@ -15,7 +15,7 @@ export function InternshipBox({ internship }: { internship: Internship }) {
           <button
             className="internship-apply-button"
             onClick={() => {
-              window.open(internship.link, "blank");
+              window.open(internship.link, "_blank");
             }}
           >
             Apply
