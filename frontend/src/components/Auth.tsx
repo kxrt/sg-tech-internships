@@ -50,11 +50,11 @@ export default function Auth() {
                     : "Don't have an account? "}
                 <Anchor
                     size="sm"
-                    component="button"
                     type="button"
                     onClick={() => toggle()}
+                    color="#6161ff"
                 >
-                    {upperFirst(type)}
+                    {type === "register" ? "Login" : "Register"}
                 </Anchor>
             </Text>
 
@@ -68,6 +68,7 @@ export default function Auth() {
                         leftIcon={<img src={GoogleIcon} />}
                         variant="default"
                         color="gray"
+                        style={{ boxShadow: "none" }}
                     >
                         Continue with Google
                     </Button>
