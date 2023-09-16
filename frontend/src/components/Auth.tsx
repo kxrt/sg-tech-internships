@@ -34,7 +34,12 @@ export default function Auth() {
     });
 
     return (
-        <Container size={420} style={{ textAlign: "left" }} my={40}>
+        <Container
+            size={420}
+            style={{ textAlign: "left" }}
+            my={40}
+            bg={"#fbfbfb"}
+        >
             <Title
                 align="center"
                 sx={(theme) => ({

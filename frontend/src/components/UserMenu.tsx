@@ -1,5 +1,6 @@
 import {
     Avatar,
+    Button,
     Grid,
     Group,
     Menu,
@@ -56,51 +57,64 @@ const UserMenu = () => {
             style={{ zIndex: 10 }}
             justify="flex-end"
         >
-            <Menu
-                width={160}
-                position="bottom-end"
-                transitionProps={{ transition: "pop-top-right" }}
-                onClose={() => setUserMenuOpened(false)}
-                onOpen={() => setUserMenuOpened(true)}
-                withinPortal
-            >
-                <Menu.Target>
-                    <UnstyledButton
-                        className={cx(classes.user, {
-                            [classes.userActive]: userMenuOpened,
-                        })}
-                    >
-                        <Group spacing={7}>
-                            <Avatar
-                                // src={user.photoURL}
-                                // alt={user.displayName}
-                                radius="xl"
-                                size={24}
-                                color="violet"
-                            >
-                                MU
-                            </Avatar>
-                            <Text
-                                weight={500}
-                                size="sm"
-                                sx={{ lineHeight: 1 }}
-                                mr={3}
-                                className={classes.userName}
-                            >
-                                {user.displayName
-                                    ? user.displayName
-                                    : user.email}
-                            </Text>
-                            <img src={MdExpandMore} />
-                        </Group>
-                    </UnstyledButton>
-                </Menu.Target>
-                <Menu.Dropdown>
-                    <Menu.Item color="red" icon={<img src={MdLogout} />}>
-                        Logout
-                    </Menu.Item>
-                </Menu.Dropdown>
-            </Menu>
+            {user ? (
+                <Menu
+                    width={160}
+                    position="bottom-end"
+                    transitionProps={{ transition: "pop-top-right" }}
+                    onClose={() => setUserMenuOpened(false)}
+                    onOpen={() => setUserMenuOpened(true)}
+                    withinPortal
+                >
+                    <Menu.Target>
+                        <UnstyledButton
+                            className={cx(classes.user, {
+                                [classes.userActive]: userMenuOpened,
+                            })}
+                        >
+                            <Group spacing={7}>
+                                <Avatar
+                                    // src={user.photoURL}
+                                    // alt={user.displayName}
+                                    radius="xl"
+                                    size={24}
+                                    color="violet"
+                                >
+                                    MU
+                                </Avatar>
+                                <Text
+                                    weight={500}
+                                    size="sm"
+                                    sx={{ lineHeight: 1 }}
+                                    mr={3}
+                                    className={classes.userName}
+                                >
+                                    {user.displayName
+                                        ? user.displayName
+                                        : user.email}
+                                </Text>
+                                <img src={MdExpandMore} />
+                            </Group>
+                        </UnstyledButton>
+                    </Menu.Target>
+                    <Menu.Dropdown>
+                        <Menu.Item color="red" icon={<img src={MdLogout} />}>
+                            Logout
+                        </Menu.Item>
+                    </Menu.Dropdown>
+                </Menu>
+            ) : (
+                <Button
+                    type="submit"
+                    radius="md"
+                    fullWidth
+                    style={{
+                        backgroundColor: "#6161ff",
+                    }}
+                >
+                    Login
+                </Button>
+            )}
         </Grid>
     );
 };
