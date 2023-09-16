@@ -29,6 +29,12 @@ const useStyles = createStyles((theme) => ({
     userActive: {
         backgroundColor: theme.white,
     },
+
+    userName: {
+        [theme.fn.smallerThan("sm")]: {
+            display: "none",
+        },
+    },
 }));
 
 // mock user state
@@ -51,7 +57,7 @@ const UserMenu = () => {
             justify="flex-end"
         >
             <Menu
-                width={260}
+                width={160}
                 position="bottom-end"
                 transitionProps={{ transition: "pop-top-right" }}
                 onClose={() => setUserMenuOpened(false)}
@@ -79,6 +85,7 @@ const UserMenu = () => {
                                 size="sm"
                                 sx={{ lineHeight: 1 }}
                                 mr={3}
+                                className={classes.userName}
                             >
                                 {user.displayName
                                     ? user.displayName
