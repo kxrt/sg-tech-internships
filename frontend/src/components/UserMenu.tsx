@@ -66,11 +66,14 @@ const UserMenu = () => {
                     >
                         <Group spacing={7}>
                             <Avatar
-                                src={user.photoURL}
-                                alt={user.displayName}
+                                // src={user.photoURL}
+                                // alt={user.displayName}
                                 radius="xl"
-                                size={32}
-                            />
+                                size={24}
+                                color="violet"
+                            >
+                                MU
+                            </Avatar>
                             <Text
                                 weight={500}
                                 size="sm"
