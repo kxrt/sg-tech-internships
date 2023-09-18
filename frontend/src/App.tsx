@@ -7,7 +7,9 @@ import { Header } from "./components/HeroHeader";
 import { Internships } from "./components/Internships";
 import { ModalForm } from "./components/ModalForm";
 import { Footer } from "./components/Footer";
-import UserMenu from "./components/UserMenu";
+
+import { AppShell } from "@mantine/core";
+import { NavHeader } from "./components/NavHeader";
 
 function App() {
     const [openModal, setOpenModal] = useState<boolean>(false);
@@ -23,23 +25,27 @@ function App() {
 
     return (
         <>
-            {openModal && <ModalForm setOpenModal={setOpenModal} />}
-            <UserMenu />
-            <Header setOpenModal={setOpenModal} handleScroll={handleScroll} />
-            <Internships reference={ref} />
-            <Footer />
-            <ToastContainer
-                position="bottom-center"
-                autoClose={4000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="colored"
-            />
+            <AppShell fixed header={<NavHeader height={64} children={null} />}>
+                {openModal && <ModalForm setOpenModal={setOpenModal} />}
+                <Header
+                    setOpenModal={setOpenModal}
+                    handleScroll={handleScroll}
+                />
+                <Internships reference={ref} />
+                <Footer />
+                <ToastContainer
+                    position="bottom-center"
+                    autoClose={4000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="colored"
+                />
+            </AppShell>
         </>
     );
 }

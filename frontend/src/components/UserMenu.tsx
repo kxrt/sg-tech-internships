@@ -1,7 +1,6 @@
 import {
     Avatar,
     Button,
-    Grid,
     Group,
     Menu,
     Text,
@@ -50,13 +49,7 @@ const UserMenu = () => {
     const [userMenuOpened, setUserMenuOpened] = useState(false);
 
     return (
-        <Grid
-            pos={"fixed"}
-            right={16}
-            top={16}
-            style={{ zIndex: 10 }}
-            justify="flex-end"
-        >
+        <>
             {user ? (
                 <Menu
                     width={160}
@@ -115,7 +108,7 @@ const UserMenu = () => {
                     Login
                 </Button>
             )}
-        </Grid>
+        </>
     );
 };
 
