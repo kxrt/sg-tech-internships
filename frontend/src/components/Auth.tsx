@@ -16,14 +16,16 @@ import {
     Box,
     createStyles,
     SimpleGrid,
+    Image,
 } from "@mantine/core";
 import GoogleIcon from "../assets/google.svg";
+import CatIllustration from "../assets/undraw_cat_epte.svg";
 
 const useStyles = createStyles((theme) => ({
     leftPanel: {
         height: "100%",
         width: "100%",
-        backgroundColor: theme.colors.violet[3],
+        backgroundColor: theme.colors.gray[1],
         [theme.fn.smallerThan("md")]: {
             display: "none",
         },
@@ -77,9 +79,9 @@ export default function Auth() {
                             breakpoints={[{ maxWidth: "md", cols: 1 }]}
                             className={classes.fill}
                         >
-                            <Box className={classes.leftPanel}>
-                                {/* left panel */}
-                            </Box>
+                            <Center className={classes.leftPanel} p={"xl"}>
+                                <Image src={CatIllustration} />
+                            </Center>
                             <Center className={classes.fill}>
                                 <Box w={"75%"}>
                                     <Title align="center" fw={900}>
