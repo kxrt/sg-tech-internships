@@ -10,9 +10,10 @@ import {
 import { useState } from "react";
 import MdLogout from "../assets/MdLogout.svg";
 import MdExpandMore from "../assets/MdExpandMore.svg";
-import { User, onAuthStateChanged, signOut } from "firebase/auth";
+import { User, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
+import { handleLogout } from "../features/auth/utils/AuthUtils";
 
 const useStyles = createStyles((theme) => ({
     user: {
@@ -99,7 +100,7 @@ const UserMenu = () => {
                             color="red"
                             icon={<img src={MdLogout} />}
                             onClick={() => {
-                                signOut(auth);
+                                handleLogout();
                             }}
                         >
                             Logout

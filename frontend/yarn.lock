@@ -952,6 +952,13 @@
   resolved "https://registry.npmjs.org/@mantine/hooks/-/hooks-6.0.19.tgz"
   integrity sha512-YkmuB6kmoenU1PVuE8tLBA+6RJIY9hIsGyIQG1yuPAy6SLWNFT8g2T9YvI/psqsUbVIYGaNEXg8zq42xbxnD8Q==
 
+"@mantine/modals@6.0.21":
+  version "6.0.21"
+  resolved "https://registry.yarnpkg.com/@mantine/modals/-/modals-6.0.21.tgz#6d7f89b55d1817c0a20b10989bf69ecb03f7a642"
+  integrity sha512-Gx2D/ZHMUuYF197JKMWey4K9FeGP9rxYp4lmAEXUrjXiST2fEhLZOdiD75KuOHXd1/sYAU9NcNRo9wXrlF/gUA==
+  dependencies:
+    "@mantine/utils" "6.0.21"
+
 "@mantine/styles@6.0.19":
   version "6.0.19"
   resolved "https://registry.npmjs.org/@mantine/styles/-/styles-6.0.19.tgz"
@@ -964,6 +971,11 @@
   version "6.0.19"
   resolved "https://registry.npmjs.org/@mantine/utils/-/utils-6.0.19.tgz"
   integrity sha512-duvtnaW1gDR2gnvUqnWhl6DMW7sN0HEWqS8Z/BbwaMi75U+Xp17Q72R9JtiIrxQbzsq+KvH9L9B/pxMVwbLirg==
+
+"@mantine/utils@6.0.21":
+  version "6.0.21"
+  resolved "https://registry.yarnpkg.com/@mantine/utils/-/utils-6.0.21.tgz#6185506e91cba3e308aaa8ea9ababc8e767995d6"
+  integrity sha512-33RVDRop5jiWFao3HKd3Yp7A9mEq4HAJxJPTuYm1NkdqX6aTKOQK7wT8v8itVodBp+sb4cJK6ZVdD1UurK/txQ==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"

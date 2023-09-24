@@ -2,8 +2,11 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Auth from "./components/Auth.tsx";
+import AuthPage from "./features/auth/AuthPage.tsx";
 import { MantineProvider } from "@mantine/core";
+import AuthForm from "./features/auth/components/AuthForm.tsx";
+import ResetPassword from "./features/auth/components/ResetPassword.tsx";
+import { ModalsProvider } from "@mantine/modals";
 // import ReactGA from "react-ga4";
 
 // ReactGA.initialize(import.meta.env.VITE_GA_TRACKING_ID);
@@ -15,7 +18,17 @@ const router = createBrowserRouter([
     },
     {
         path: "/auth",
-        element: <Auth />,
+        element: <AuthPage />,
+        children: [
+            {
+                path: "",
+                element: <AuthForm />,
+            },
+            {
+                path: "reset",
+                element: <ResetPassword />,
+            },
+        ],
     },
 ]);
 
@@ -53,6 +66,8 @@ const theme = {
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
-        <RouterProvider router={router} />
+        <ModalsProvider>
+            <RouterProvider router={router} />
+        </ModalsProvider>
     </MantineProvider>
 );
