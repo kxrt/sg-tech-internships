@@ -4,6 +4,8 @@ services:
     build: 
       context: ./backend
       dockerfile: Dockerfile.dev
+    volumes:
+      - "./backend:/go/src/backend"
     ports:
       - "8000:8000"
 
@@ -11,6 +13,8 @@ services:
   frontend:
     build: 
       context: ./frontend
+    volumes:
+      - "./frontend/src:/frontend/src"
     ports:
       - "8080:5173"
     depends_on:
