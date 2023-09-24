@@ -89,7 +89,7 @@ func CreateIssue(internship models.InternshipData) error {
 
 	// set headers
 	req.Header.Set("Accept", "application/vnd.github+json")
-	req.Header.Set("Authorization", "Bearer "+os.Getenv("GITHUB_TOKEN"))
+	req.Header.Set("Authorization", "Bearer "+os.Getenv("GITHUB_API_TOKEN"))
 
 	// send request
 	client := &http.Client{}

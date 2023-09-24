@@ -1,22 +1,14 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
 	"backend/handlers"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 func main() {
-	// load env variables
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-
 	r := setupRouter()
 	r.Run(":8000")
 }
