@@ -1,6 +1,8 @@
-package main
+package handlers
 
 import (
+	"backend/models"
+	"backend/utils"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -13,16 +15,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func getInternships(c *gin.Context) {
+func GetInternships(c *gin.Context) {
 	// fetch data from github
-	data, err := fetchData()
+	data, err := utils.FetchData()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data fetch failed"})
 		return
 	}
 
 	// extract table data from markdown
-	summer, offcycle, err := extractTables(data)
+	summer, offcycle, err := utils.ExtractTables(data)
 	if err != nil {
 		log.Default().Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data extraction failed"})
@@ -31,23 +33,23 @@ func getInternships(c *gin.Context) {
 
 	// return data
 	c.JSON(http.StatusOK,
-		gin.H{"data": map[string][]Internship{
+		gin.H{"data": map[string][]models.Internship{
 			"summer":   summer,
 			"offcycle": offcycle},
 		},
 	)
 }
 
-func postInternship(c *gin.Context) {
+func PostInternship(c *gin.Context) {
 	// parse request body
-	var internship InternshipData
+	var internship models.InternshipData
 	if err := c.ShouldBindJSON(&internship); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
 		return
 	}
 
 	// create a GitHub issue
-	err := createIssue(internship)
+	err := CreateIssue(internship)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Issue creation failed"})
 		return
@@ -56,7 +58,7 @@ func postInternship(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "ok"})
 }
 
-func createIssue(internship InternshipData) error {
+func CreateIssue(internship models.InternshipData) error {
 	// create issue body
 	body := fmt.Sprintf("> Automated submission for %s\n\n", internship.Company)
 	if internship.IsSummer {
@@ -103,7 +105,7 @@ func createIssue(internship InternshipData) error {
 	if resp.StatusCode != http.StatusCreated {
 		log.Println("Status code:", resp.StatusCode)
 		log.Println("Response body:", string(res))
-		return fmt.Errorf("Status code: %d", resp.StatusCode)
+		return fmt.Errorf("status code: %d", resp.StatusCode)
 	}
 	defer resp.Body.Close()
 

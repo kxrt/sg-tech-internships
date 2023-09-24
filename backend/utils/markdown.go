@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"errors"
@@ -6,10 +6,12 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+
+	"backend/models"
 )
 
 // fetch data from github
-func fetchData() (string, error) {
+func FetchData() (string, error) {
 	url := "https://raw.githubusercontent.com/kxrt/Singapore-Summer2024-TechInternships/main/README.md"
 
 	res, err := http.Get(url)
@@ -26,11 +28,11 @@ func fetchData() (string, error) {
 }
 
 // extract table data from markdown
-func extractTables(data string) ([]Internship, []Internship, error) {
+func ExtractTables(data string) ([]models.Internship, []models.Internship, error) {
 	tableRegex := regexp.MustCompile(`\|([\s\S]*?)\|\n`)
 	rows := tableRegex.FindAllStringSubmatch(data, -1)
 
-	var summer, offcycle []Internship
+	var summer, offcycle []models.Internship
 	isSummer := true
 
 	for _, row := range rows {
@@ -51,14 +53,14 @@ func extractTables(data string) ([]Internship, []Internship, error) {
 
 		// check for invalid data
 		if len(data) != 4 {
-			return nil, nil, errors.New("Invalid data")
+			return nil, nil, errors.New("invalid data")
 		}
 
 		// application links are in the form [Open](link)
 		link := strings.TrimSuffix(strings.TrimPrefix(strings.TrimSpace(data[2]), "[Open]("), ")")
 
 		// create internship object
-		internship := Internship{
+		internship := models.Internship{
 			Company:   strings.TrimSpace(data[0]),
 			Role:      strings.ReplaceAll(strings.TrimSpace(data[1]), "\\", ""),
 			Link:      link,

@@ -4,6 +4,8 @@ import (
 	"log"
 	"net/http"
 
+	"backend/handlers"
+
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -28,10 +30,10 @@ func setupRouter() *gin.Engine {
 	})
 
 	// get table data
-	r.GET("/api/internships", getInternships)
+	r.GET("/api/internships", handlers.GetInternships)
 
 	// post internship role
-	r.POST("/api/internships", postInternship)
+	r.POST("/api/internships", handlers.PostInternship)
 
 	return r
 }
