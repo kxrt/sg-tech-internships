@@ -1,0 +1,17 @@
+services:
+  # service to get intership data
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8000:8000"
+
+  # frontend service
+  frontend:
+    build: 
+      context: ./frontend
+    ports:
+      - "8080:5173"
+    depends_on:
+      - backend
