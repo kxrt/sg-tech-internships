@@ -13,12 +13,13 @@ This repository hosts the frontend (React, Vite) and backend (Go) code for the [
 ### Instructions
 
 1. Clone this repository.
-1. Place the GitHub API URL to create new issues inside `backend/.env`.
-1. Place the GitHUB PAT with `public_repo` access inside `backend/.env`.
-1. Create a Google Analytics 4 data stream, and place the measurement ID inside `frontend/.env`.
-1. Navigate to the root directory and run `docker-compose up --build`.
-1.  The frontend is now accessible via `http://localhost:8080`.
-1. To remove the containers, run `docker-compose down`.
+2. Rename `.env.example` to `.env`, after which:
+   1. Place the GitHub API URL to create new issues inside `.env`.
+   2. Place the GitHUB PAT with `public_repo` access inside `.env`.
+   3. Create a Google Analytics 4 data stream, and place the measurement ID inside `.env`.
+3. Navigate to the root directory and run `docker-compose up --build`.
+4.  The frontend is now accessible via `http://localhost:8080`.
+5. To remove the containers, run `docker-compose down`.
 
 ## Backend
 
