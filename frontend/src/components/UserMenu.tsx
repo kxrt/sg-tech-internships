@@ -10,6 +10,9 @@ import {
 import { useState } from "react";
 import MdLogout from "../assets/MdLogout.svg";
 import MdExpandMore from "../assets/MdExpandMore.svg";
+import { User, onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../config/firebase";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
     user: {
@@ -19,10 +22,10 @@ const useStyles = createStyles((theme) => ({
         borderRadius: theme.radius.sm,
         transition: "background-color 100ms ease",
 
-        backgroundColor: theme.white,
+        backgroundColor: theme.colors.gray[0],
 
         "&:hover": {
-            backgroundColor: theme.colors.gray[0],
+            backgroundColor: theme.colors.gray[1],
         },
     },
 
@@ -37,16 +40,18 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-// mock user state
-const user = {
-    displayName: "MOCK USER",
-    photoURL: "",
-    email: "mock_user@handsome.com",
-};
-
 const UserMenu = () => {
-    const { classes, cx } = useStyles();
-    const [userMenuOpened, setUserMenuOpened] = useState(false);
+    const { classes } = useStyles();
+    const [user, setUser] = useState<User | null>(null);
+    const navigate = useNavigate();
+
+    onAuthStateChanged(auth, (newUser) => {
+        if (newUser) {
+            setUser(newUser);
+        } else if (newUser == null) {
+            setUser(null);
+        }
+    });
 
     return (
         <>
@@ -55,25 +60,24 @@ const UserMenu = () => {
                     width={160}
                     position="bottom-end"
                     transitionProps={{ transition: "pop-top-right" }}
-                    onClose={() => setUserMenuOpened(false)}
-                    onOpen={() => setUserMenuOpened(true)}
-                    withinPortal
                 >
                     <Menu.Target>
-                        <UnstyledButton
-                            className={cx(classes.user, {
-                                [classes.userActive]: userMenuOpened,
-                            })}
-                        >
+                        <UnstyledButton className={classes.user}>
                             <Group spacing={7}>
                                 <Avatar
-                                    // src={user.photoURL}
-                                    // alt={user.displayName}
+                                    src={user.photoURL}
+                                    alt={
+                                        user.displayName
+                                            ? user.displayName
+                                            : "profile photo"
+                                    }
                                     radius="xl"
                                     size={24}
                                     color="violet"
                                 >
-                                    MU
+                                    {user.displayName
+                                        ? user.displayName[0]
+                                        : "?"}
                                 </Avatar>
                                 <Text
                                     weight={500}
@@ -91,7 +95,13 @@ const UserMenu = () => {
                         </UnstyledButton>
                     </Menu.Target>
                     <Menu.Dropdown>
-                        <Menu.Item color="red" icon={<img src={MdLogout} />}>
+                        <Menu.Item
+                            color="red"
+                            icon={<img src={MdLogout} />}
+                            onClick={() => {
+                                signOut(auth);
+                            }}
+                        >
                             Logout
                         </Menu.Item>
                     </Menu.Dropdown>
@@ -100,9 +110,11 @@ const UserMenu = () => {
                 <Button
                     type="submit"
                     radius="md"
-                    fullWidth
                     style={{
                         backgroundColor: "#6161ff",
+                    }}
+                    onClick={() => {
+                        navigate("auth");
                     }}
                 >
                     Login
