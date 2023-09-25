@@ -5,6 +5,7 @@ type Internship struct {
 	Role      string `json:"role"`
 	Link      string `json:"link"`
 	DateAdded string `json:"date_added"`
+	IsSummer  bool   `json:"is_summer"`
 }
 
 type InternshipData struct {

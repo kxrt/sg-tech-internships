@@ -3,6 +3,7 @@ package utils
 import (
 	"errors"
 	"io"
+	"log"
 	"net/http"
 	"regexp"
 	"strings"
@@ -65,6 +66,7 @@ func ExtractTables(data string) ([]models.Internship, []models.Internship, error
 			Role:      strings.ReplaceAll(strings.TrimSpace(data[1]), "\\", ""),
 			Link:      link,
 			DateAdded: strings.TrimSpace(data[3]),
+			IsSummer:  isSummer,
 		}
 
 		if isSummer {
@@ -75,4 +77,26 @@ func ExtractTables(data string) ([]models.Internship, []models.Internship, error
 	}
 
 	return summer, offcycle, nil
+}
+
+func GetInternshipsFromGitHub() (map[string][]models.Internship, error) {
+	// fetch data from github
+	data, err := FetchData()
+	if err != nil {
+		log.Default().Println(err)
+		return nil, errors.New("data fetch failed")
+	}
+
+	// extract table data from markdown
+	summer, offcycle, err := ExtractTables(data)
+	if err != nil {
+		log.Default().Println(err)
+		return nil, errors.New("data extraction failed")
+	}
+
+	// return data
+	return map[string][]models.Internship{
+		"summer":   summer,
+		"offcycle": offcycle}, nil
+
 }

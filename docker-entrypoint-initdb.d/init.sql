@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS internships (
     company VARCHAR(255) NOT NULL,
     role VARCHAR(255) NOT NULL,
     link VARCHAR(255) NOT NULL,
-    date_added DATE NOT NULL
+    date_added DATE NOT NULL,
+    is_summer BOOLEAN NOT NULL,
 );
 
 -- Create a table for users

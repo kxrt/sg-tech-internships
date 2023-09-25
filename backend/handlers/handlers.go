@@ -1,9 +1,10 @@
 package handlers
 
 import (
+	db "backend/database"
 	"backend/models"
-	"backend/utils"
 	"bytes"
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -15,29 +16,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetInternships(c *gin.Context) {
-	// fetch data from github
-	data, err := utils.FetchData()
+func GetInternships(c *gin.Context, database *sql.DB) {
+	// get internships from database
+	internships, err := db.GetInternshipsFromDB(database)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data fetch failed"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database query failed"})
 		return
 	}
-
-	// extract table data from markdown
-	summer, offcycle, err := utils.ExtractTables(data)
-	if err != nil {
-		log.Default().Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data extraction failed"})
-		return
-	}
-
-	// return data
-	c.JSON(http.StatusOK,
-		gin.H{"data": map[string][]models.Internship{
-			"summer":   summer,
-			"offcycle": offcycle},
-		},
-	)
+	c.JSON(http.StatusOK, map[string]map[string][]models.Internship{"data": internships})
 }
 
 func PostInternship(c *gin.Context) {
