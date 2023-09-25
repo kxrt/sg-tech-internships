@@ -30,7 +30,7 @@ services:
 
   # postgres service for backend
   postgres:
-    image: postgres:latest
+    image: postgres:alpine
     ports:
       - "5432:5432"
     environment:

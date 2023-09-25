@@ -20,6 +20,7 @@ func GetInternships(c *gin.Context, database *sql.DB) {
 	// get internships from database
 	internships, err := db.GetInternshipsFromDB(database)
 	if err != nil {
+		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database query failed"})
 		return
 	}

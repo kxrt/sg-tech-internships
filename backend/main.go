@@ -5,15 +5,17 @@ import (
 	"log"
 	"net/http"
 
-	db "backend/database"
+	database "backend/database"
 	"backend/handlers"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mileusna/crontab"
 )
 
 func main() {
 	// initialise database connection
-	db, err := db.InitialiseConnection()
+	db, err := database.InitialiseConnection()
+	database.SyncDBWithGitHub(db)
 
 	// check for errors
 	if err != nil {
@@ -22,6 +24,10 @@ func main() {
 
 	// close database connection
 	defer db.Close()
+
+	// repeat job at 10pm everyday
+	ctab := crontab.New()
+	ctab.MustAddJob("0 22 * * 0-5", func() { database.SyncDBWithGitHub(db) })
 
 	r := setupRouter(db)
 	r.Run(":8000")
