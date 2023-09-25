@@ -128,7 +128,7 @@ func SyncDBWithGitHub(db *sql.DB) error {
 
 // checkInternshipExists checks if an internship exists in the database
 func checkInternshipExists(db *sql.DB, internship models.Internship) (bool, error) {
-	// query database
+	// query database - company, role, summer to indicate unique internship
 	rows, err := db.Query("SELECT * FROM internships WHERE company=$1 AND role=$2 AND is_summer=$3", internship.Company, internship.Role, internship.IsSummer)
 	if err != nil {
 		return false, err

@@ -98,3 +98,7 @@ func CreateIssue(internship models.InternshipData) error {
 
 	return nil
 }
+
+func Login(c *gin.Context) {
+	// TODO: implement login
+}

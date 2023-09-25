@@ -49,5 +49,8 @@ func setupRouter(db *sql.DB) *gin.Engine {
 	// post internship role
 	r.POST("/api/internships", handlers.PostInternship)
 
+	// login through firebase and get data
+	r.POST("/api/login", handlers.Login)
+
 	return r
 }

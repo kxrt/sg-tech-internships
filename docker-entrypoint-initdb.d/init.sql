@@ -5,7 +5,9 @@ CREATE TABLE IF NOT EXISTS internships (
     role VARCHAR(255) NOT NULL,
     link VARCHAR(255) NOT NULL,
     date_added DATE NOT NULL,
-    is_summer BOOLEAN NOT NULL
+    is_summer BOOLEAN NOT NULL,
+    -- company, role, is_summer should be unique tuples
+    CONSTRAINT unique_internship UNIQUE (company, role, is_summer)
 );
 
 -- Create a table for users
@@ -16,8 +18,8 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- Create a table for applications
 CREATE TABLE IF NOT EXISTS applications (
-    application_id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(user_id),
     internship_id INT REFERENCES internships(internship_id),
-    status VARCHAR(255) NOT NULL
+    status VARCHAR(255) NOT NULL,
+    PRIMARY KEY (user_id, internship_id)
 );
