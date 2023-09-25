@@ -1,6 +1,7 @@
 package models
 
 type Internship struct {
+	ID        int    `json:"internship_id"`
 	Company   string `json:"company"`
 	Role      string `json:"role"`
 	Link      string `json:"link"`

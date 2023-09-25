@@ -4,6 +4,7 @@ import (
 	"backend/models"
 	"backend/utils"
 	"database/sql"
+	"log"
 	"os"
 
 	_ "github.com/lib/pq"
@@ -37,10 +38,18 @@ func GetInternshipsFromDB(db *sql.DB) (map[string][]models.Internship, error) {
 		var internship models.Internship
 
 		// scan row into internship object
-		err := rows.Scan(&internship.Company, &internship.Role, &internship.Link, &internship.DateAdded, &internship.IsSummer)
+		err := rows.Scan(&internship.ID, &internship.Company, &internship.Role, &internship.Link, &internship.DateAdded, &internship.IsSummer)
 		if err != nil {
 			return nil, err
 		}
+
+		// format date to dd mmm yyyy
+		formattedDate, err := utils.FormatDate(internship.DateAdded)
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+		internship.DateAdded = formattedDate
 
 		// append internship to slice depending on season
 		if internship.IsSummer {

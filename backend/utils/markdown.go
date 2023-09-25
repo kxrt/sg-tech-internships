@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+	"time"
 
 	"backend/models"
 )
@@ -99,4 +100,19 @@ func GetInternshipsFromGitHub() (map[string][]models.Internship, error) {
 		"summer":   summer,
 		"offcycle": offcycle}, nil
 
+}
+
+func FormatDate(date string) (string, error) {
+	// Parse the input date string
+	parsedTime, err := time.Parse(time.RFC3339, date)
+	if err != nil {
+		log.Println("Error parsing date:", err)
+		return "", err
+	}
+
+	// Format the parsed date as "02 Jan 2006"
+	formattedDateString := parsedTime.Format("02 Jan 2006")
+
+	// return formatted date
+	return formattedDateString, nil
 }
