@@ -1,6 +1,6 @@
 .DS_Store
 */.DS_Store
-*/.env
+*.env
 
 # frontend
 # Logs
@@ -26,3 +26,5 @@ frontend/.idea
 *.njsproj
 *.sln
 *.sw?
+
+*service-account-key.json

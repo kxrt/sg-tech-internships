@@ -1,0 +1,287 @@
+{
+  "openapi" : "3.0.3",
+  "info" : {
+    "contact" : {
+      "email" : "kvrtikeya@gmail.com"
+    },
+    "description" : "This is the backend for the SG Tech Internships website based on the OpenAPI 3.0 specification. \nYou can find out more about Swagger at [https://swagger.io](https://swagger.io).\n\n\nSome useful links:\n- [The main repository](https://github.com/kxrt/Singapore-TechInternships-Summer2024)\n- [The source code for the website](https://github.com/kxrt/sg-tech-internships)",
+    "termsOfService" : "http://swagger.io/terms/",
+    "title" : "SG Tech Internships - OpenAPI 3.0",
+    "version" : "2.0.0"
+  },
+  "externalDocs" : {
+    "description" : "Find out more about Swagger",
+    "url" : "http://swagger.io"
+  },
+  "servers" : [ {
+    "url" : "http://localhost:8000"
+  } ],
+  "tags" : [ {
+    "description" : "Access and create internship information",
+    "name" : "internships"
+  }, {
+    "description" : "Access and modify user-specific information",
+    "name" : "user"
+  } ],
+  "paths" : {
+    "/api/internships" : {
+      "get" : {
+        "operationId" : "Get all internship postings",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Get_all_internship_postings_200_response"
+                }
+              }
+            },
+            "description" : "Successful operation"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        },
+        "summary" : "Get all internship postings",
+        "tags" : [ "internships" ]
+      },
+      "post" : {
+        "operationId" : "Add a new internship posting",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/InternshipData"
+              }
+            }
+          },
+          "description" : "Create a new internship posting",
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Add_a_new_internship_posting_200_response"
+                }
+              }
+            },
+            "description" : "Successful operation"
+          },
+          "400" : {
+            "description" : "Invalid request body"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        },
+        "summary" : "Add a new internship posting",
+        "tags" : [ "internships" ]
+      }
+    },
+    "/api/user" : {
+      "get" : {
+        "operationId" : "Login and get internship application data",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Login_and_get_internship_application_data_200_response"
+                }
+              }
+            },
+            "description" : "Successful operation"
+          },
+          "401" : {
+            "description" : "Unauthorized - invalid token"
+          },
+          "404" : {
+            "description" : "User not found"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "summary" : "Login and get internship application data",
+        "tags" : [ "user" ]
+      }
+    },
+    "/api/user/update" : {
+      "post" : {
+        "operationId" : "Update internship application data",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Update_internship_application_data_request"
+              }
+            }
+          },
+          "description" : "Update internship application data",
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Add_a_new_internship_posting_200_response"
+                }
+              }
+            },
+            "description" : "Successful operation"
+          },
+          "400" : {
+            "description" : "Invalid request body"
+          },
+          "401" : {
+            "description" : "Unauthorized - invalid token"
+          },
+          "404" : {
+            "description" : "User not found"
+          },
+          "500" : {
+            "description" : "Server error"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "summary" : "Update internship application data",
+        "tags" : [ "user" ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Internship" : {
+        "properties" : {
+          "internship_id" : {
+            "example" : 1,
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "company" : {
+            "example" : "Google",
+            "type" : "string"
+          },
+          "role" : {
+            "example" : "Software Engineering Intern",
+            "type" : "string"
+          },
+          "link" : {
+            "example" : "https://google.com/careers",
+            "type" : "string"
+          },
+          "date_added" : {
+            "example" : "20 Aug 2023",
+            "type" : "string"
+          },
+          "is_summer" : {
+            "example" : true,
+            "type" : "boolean"
+          }
+        },
+        "type" : "object"
+      },
+      "InternshipData" : {
+        "properties" : {
+          "company" : {
+            "example" : "Google",
+            "type" : "string"
+          },
+          "role" : {
+            "example" : "Software Engineering Intern",
+            "type" : "string"
+          },
+          "link" : {
+            "example" : "https://google.com/careers",
+            "type" : "string"
+          },
+          "is_summer" : {
+            "example" : true,
+            "type" : "boolean"
+          }
+        },
+        "type" : "object"
+      },
+      "Get_all_internship_postings_200_response" : {
+        "properties" : {
+          "data" : {
+            "items" : {
+              "$ref" : "#/components/schemas/Internship"
+            },
+            "type" : "array"
+          }
+        },
+        "type" : "object"
+      },
+      "Add_a_new_internship_posting_200_response" : {
+        "properties" : {
+          "status" : {
+            "example" : "OK",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "Login_and_get_internship_application_data_200_response_data_status" : {
+        "properties" : {
+          ":internship_id" : {
+            "enum" : [ "Pending", "Applied", "HireVue", "HireVue Complete", "OA", "OA Complete", "Interview", "Interview Complete", "Offer", "Accepted", "Rejected", "Declined" ],
+            "example" : "Pending",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "Login_and_get_internship_application_data_200_response_data" : {
+        "properties" : {
+          "user_id" : {
+            "example" : "ABCD",
+            "type" : "string"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/Login_and_get_internship_application_data_200_response_data_status"
+          }
+        },
+        "type" : "object"
+      },
+      "Login_and_get_internship_application_data_200_response" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Login_and_get_internship_application_data_200_response_data"
+          }
+        },
+        "type" : "object"
+      },
+      "Update_internship_application_data_request" : {
+        "properties" : {
+          "internship_id" : {
+            "example" : 1,
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "status" : {
+            "enum" : [ "Pending", "Applied", "HireVue", "HireVue Complete", "OA", "OA Complete", "Interview", "Interview Complete", "Offer", "Accepted", "Rejected", "Declined" ],
+            "example" : "Applied",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : {
+      "bearerAuth" : {
+        "bearerFormat" : "JWT",
+        "scheme" : "bearer",
+        "type" : "http"
+      }
+    }
+  }
+}

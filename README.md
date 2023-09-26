@@ -13,20 +13,45 @@ This repository hosts the frontend (React, Vite) and backend (Go) code for the [
 ### Instructions
 
 1. Clone this repository.
-1. Place the GitHub API URL to create new issues inside `backend/.env`.
-1. Place the GitHUB PAT with `public_repo` access inside `backend/.env`.
-1. Create a Google Analytics 4 data stream, and place the measurement ID inside `frontend/.env`.
-1. Navigate to the root directory and run `docker-compose up --build`.
-1.  The frontend is now accessible via `http://localhost:8080`.
-1. To remove the containers, run `docker-compose down`.
+2. Create a service account on Firebase, and download the service account key.
+   - Name this file `service-account-key.json` and place it in the project root.
+3. Rename `.env.example` to `.env`, after which:
+   1. Place the GitHub API URL to create new issues inside `.env`.
+      -  This URL ends with `/issues`, which is where new GitHub issues will be posted.
+   2. Place the GitHUB PAT with `public_repo` access inside `.env`.
+      - The PAT authorizes access to make issues from the token creator's account.
+   3. Create a Google Analytics 4 data stream, and place the measurement ID inside `.env`.
+4. Navigate to the root directory and run `docker-compose up --build`.
+5.  The frontend is now accessible via `http://localhost:8080`.
+6. To remove the containers, run `docker-compose down`.
 
 ## Backend
 
-The Go backend defines a RESTful API with 2 routes. They are:
+The Go backend defines a RESTful API with multiple routes. An OpenAPI specification is available in `/backend/docs/openapi.yaml`. The API is documented using Swagger UI, which is accessible at `http://localhost:8080/api/docs`, where requests can be made and responses viewed. This is **not** available on the production website.
+
+They are:
 
 1. `GET /api/internships`
 
-This route fetches data from the Markdown file from the main repository, processes the table data into a list of opportunities separated into summer and off-cycle internship roles, and returns this.
+This route fetches data from the PostgreSQL database and returns it.
+
+Periodically, the backend automatically fetches the Markdown file from the main repository, processes the table data into a list of opportunities separated into summer and off-cycle internship roles, and returns this.
+
+Response body:
+```
+{
+  "data": [
+    {
+      "internship_id": 1,
+      "company": "Google",
+      "role": "Software Engineering Intern",
+      "link": "https://google.com/careers",
+      "date_added": "20 Aug 2023",
+      "is_summer": true
+    }
+  ]
+}
+```
 
 2. `POST /api/internships`
 
@@ -34,11 +59,64 @@ This route allows users to submit an opportunity to the main repository, by conn
 
 Request body:
 ```
-	company    string // company name
-	role       string // role name
-	link       string // application link
-	is_summer  bool   // internship period
+{
+  "company": "Google",
+  "role": "Software Engineering Intern",
+  "link": "https://google.com/careers",
+  "is_summer": true
+}
 ```
+
+Response body:
+```
+{
+  "status": "OK"
+}
+```
+
+1. `GET /api/user`
+
+This route allows users to log in to the website using their Google account, and returns user data from the PostgreSQL database. 
+
+It requires an ID token from the frontend that is verified using the Google API. This token is placed in the `Authorization` header as a Bearer token.
+
+Return format:
+```
+{
+  "data": {
+	"user_id": "ABCD",
+	"status": {
+		"1": "Applied" // internship_id: status
+		},
+	}
+}
+```
+
+4. `POST /api/user/update`
+
+This route allows users to update their application status for a particular internship role. It requires an ID token from the frontend that is verified using the Google API. This token is placed in the `Authorization` header as a Bearer token.
+
+Request body:
+```
+{
+  "internship_id": 1,
+  "status": "Applied"
+}
+```
+
+Response body:
+```
+{
+  "status": "OK"
+}
+```
+
+Additional endpoints:
+
+- `GET /api/ping` - Health check endpoint
+- `GET /api/docs` - Swagger UI page
+- `GET /api/docs/openapi.json` - OpenAPI specification
+
 
 ## Frontend
 

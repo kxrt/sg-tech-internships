@@ -1,15 +1,19 @@
-package main
+package utils
 
 import (
 	"errors"
 	"io"
+	"log"
 	"net/http"
 	"regexp"
 	"strings"
+	"time"
+
+	"backend/models"
 )
 
 // fetch data from github
-func fetchData() (string, error) {
+func FetchData() (string, error) {
 	url := "https://raw.githubusercontent.com/kxrt/Singapore-Summer2024-TechInternships/main/README.md"
 
 	res, err := http.Get(url)
@@ -26,11 +30,11 @@ func fetchData() (string, error) {
 }
 
 // extract table data from markdown
-func extractTables(data string) ([]Internship, []Internship, error) {
+func ExtractTables(data string) ([]models.Internship, []models.Internship, error) {
 	tableRegex := regexp.MustCompile(`\|([\s\S]*?)\|\n`)
 	rows := tableRegex.FindAllStringSubmatch(data, -1)
 
-	var summer, offcycle []Internship
+	var summer, offcycle []models.Internship
 	isSummer := true
 
 	for _, row := range rows {
@@ -51,18 +55,19 @@ func extractTables(data string) ([]Internship, []Internship, error) {
 
 		// check for invalid data
 		if len(data) != 4 {
-			return nil, nil, errors.New("Invalid data")
+			return nil, nil, errors.New("invalid data")
 		}
 
 		// application links are in the form [Open](link)
 		link := strings.TrimSuffix(strings.TrimPrefix(strings.TrimSpace(data[2]), "[Open]("), ")")
 
 		// create internship object
-		internship := Internship{
+		internship := models.Internship{
 			Company:   strings.TrimSpace(data[0]),
 			Role:      strings.ReplaceAll(strings.TrimSpace(data[1]), "\\", ""),
 			Link:      link,
 			DateAdded: strings.TrimSpace(data[3]),
+			IsSummer:  isSummer,
 		}
 
 		if isSummer {
@@ -73,4 +78,41 @@ func extractTables(data string) ([]Internship, []Internship, error) {
 	}
 
 	return summer, offcycle, nil
+}
+
+func GetInternshipsFromGitHub() (map[string][]models.Internship, error) {
+	// fetch data from github
+	data, err := FetchData()
+	if err != nil {
+		log.Default().Println(err)
+		return nil, errors.New("data fetch failed")
+	}
+
+	// extract table data from markdown
+	summer, offcycle, err := ExtractTables(data)
+	if err != nil {
+		log.Default().Println(err)
+		return nil, errors.New("data extraction failed")
+	}
+
+	// return data
+	return map[string][]models.Internship{
+		"summer":   summer,
+		"offcycle": offcycle}, nil
+
+}
+
+func FormatDate(date string) (string, error) {
+	// Parse the input date string
+	parsedTime, err := time.Parse(time.RFC3339, date)
+	if err != nil {
+		log.Println("Error parsing date:", err)
+		return "", err
+	}
+
+	// Format the parsed date as "02 Jan 2006"
+	formattedDateString := parsedTime.Format("02 Jan 2006")
+
+	// return formatted date
+	return formattedDateString, nil
 }

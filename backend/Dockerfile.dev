@@ -1,0 +1,16 @@
+# base image
+FROM golang:alpine
+
+# set working directory
+WORKDIR /go/src/backend
+
+# add source code
+COPY . /go/src/backend/
+
+# install watch mode for go
+RUN go install github.com/mitranim/gow@latest
+
+EXPOSE 8080
+
+# run app
+CMD ["gow" ,"run", "."]
