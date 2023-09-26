@@ -12,13 +12,13 @@ CREATE TABLE IF NOT EXISTS internships (
 
 -- Create a table for users
 CREATE TABLE IF NOT EXISTS users (
-    user_id SERIAL PRIMARY KEY,
+    user_id VARCHAR(255) PRIMARY KEY,
     email VARCHAR(255) NOT NULL
 );
 
 -- Create a table for applications
 CREATE TABLE IF NOT EXISTS applications (
-    user_id INT REFERENCES users(user_id),
+    user_id VARCHAR(255) REFERENCES users(user_id),
     internship_id INT REFERENCES internships(internship_id),
     status VARCHAR(255) NOT NULL,
     PRIMARY KEY (user_id, internship_id)

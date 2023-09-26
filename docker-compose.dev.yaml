@@ -6,12 +6,14 @@ services:
       dockerfile: Dockerfile.dev
     volumes:
       - "./backend:/go/src/backend"
+      - ./service-account-key.json:/service-account-key.json
     ports:
       - "8000:8000"
     environment:
       DATABASE_URL: ${DATABASE_URL}
       GITHUB_API_URL: ${GITHUB_API_URL}
       GITHUB_API_TOKEN: ${GITHUB_API_TOKEN}
+      GOOGLE_APPLICATION_CREDENTIALS: /service-account-key.json
     depends_on:
       - postgres
 
@@ -31,8 +33,6 @@ services:
   # postgres service for backend
   postgres:
     image: postgres:alpine
-    ports:
-      - "5432:5432"
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}

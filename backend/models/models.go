@@ -15,3 +15,13 @@ type InternshipData struct {
 	Link     string `json:"link"`
 	IsSummer bool   `json:"is_summer"`
 }
+
+type User struct {
+	ID     string         `json:"user_id"`
+	Status map[int]string `json:"status"`
+}
+
+type UpdateRequest struct {
+	InternshipID int    `json:"internship_id"`
+	Status       string `json:"status"`
+}

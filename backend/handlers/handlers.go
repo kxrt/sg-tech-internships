@@ -4,6 +4,7 @@ import (
 	db "backend/database"
 	"backend/models"
 	"bytes"
+	"context"
 	"database/sql"
 	"encoding/json"
 	"fmt"
@@ -13,6 +14,7 @@ import (
 	"os"
 	"time"
 
+	"firebase.google.com/go/v4/auth"
 	"github.com/gin-gonic/gin"
 )
 
@@ -99,6 +101,85 @@ func CreateIssue(internship models.InternshipData) error {
 	return nil
 }
 
-func Login(c *gin.Context) {
-	// TODO: implement login
+func VerifyToken(client *auth.Client, idToken string) (*auth.Token, error) {
+	// check if token is valid
+	ctx := context.Background()
+	token, err := client.VerifyIDToken(ctx, idToken)
+
+	// return error if invalid
+	if err != nil {
+		log.Printf("error verifying ID token: %v\n", err)
+		return nil, err
+	}
+
+	// return token
+	return token, nil
+}
+
+func Login(c *gin.Context, database *sql.DB) {
+	tokenInterface, exists := c.Get("token")
+
+	// return error if invalid
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		return
+	}
+
+	// convert tokenInterface to *auth.Token
+	token, ok := tokenInterface.(*auth.Token)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to convert token"})
+		return
+	}
+
+	// get user from database
+	user, err := db.GetUserFromDB(database, token)
+
+	// return error if user not found
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	// return user
+	marshalledUser, _ := json.Marshal(user)
+	c.JSON(http.StatusOK, map[string]string{"data": string(marshalledUser)})
+}
+
+func Update(c *gin.Context, database *sql.DB) {
+	tokenInterface, exists := c.Get("token")
+
+	// return error if invalid
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		return
+	}
+
+	// convert tokenInterface to *auth.Token
+	token, ok := tokenInterface.(*auth.Token)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to convert token"})
+		return
+	}
+
+	// parse request body
+	var ur models.UpdateRequest
+	if err := c.ShouldBindJSON(&ur); err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	// update user in database
+	err := db.UpdateUser(database, token, ur)
+
+	// return error if update failed
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusNotFound, gin.H{"error": "Update failed"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": "Success"})
 }

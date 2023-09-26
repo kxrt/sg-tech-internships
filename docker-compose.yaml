@@ -9,8 +9,6 @@ services:
       DATABASE_URL: ${DATABASE_URL}
       GITHUB_API_URL: ${GITHUB_API_URL}
       GITHUB_API_TOKEN: ${GITHUB_API_TOKEN}
-    depends_on:
-      - postgres
 
   # frontend service
   frontend:
@@ -32,8 +30,10 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      GOOGLE_APPLICATION_CREDENTIALS: /service-account-key.json
     volumes:
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       - pg-data:/var/lib/postgresql/data
+      - ./service-account-key.json:/service-account-key.json
 volumes:
   pg-data:
