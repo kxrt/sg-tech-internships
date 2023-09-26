@@ -1,0 +1,224 @@
+openapi: 3.0.3
+info:
+  title: SG Tech Internships - OpenAPI 3.0
+  description: |-
+    This is the backend for the SG Tech Internships website based on the OpenAPI 3.0 specification. 
+    You can find out more about Swagger at [https://swagger.io](https://swagger.io).
+    
+    
+    Some useful links:
+    - [The main repository](https://github.com/kxrt/Singapore-TechInternships-Summer2024)
+    - [The source code for the website](https://github.com/kxrt/sg-tech-internships)
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: kvrtikeya@gmail.com
+  version: 2.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:8000
+tags:
+  - name: internships
+    description: Access and create internship information
+  - name: user
+    description: Access and modify user-specific information
+paths:
+  /api/internships:
+    get:
+      tags:
+        - internships
+      summary: Get all internship postings
+      operationId: Get all internship postings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Internship'
+        '500':
+          description: Server error
+    post:
+      tags:
+        - internships
+      summary: Add a new internship posting
+      operationId: Add a new internship posting
+      requestBody:
+        description: Create a new internship posting
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternshipData'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "OK"
+        '400':
+          description: Invalid request body
+        '500':
+          description: Server error
+
+  /api/user:
+    get:
+      tags:
+        - user
+      summary: Login and get internship application data
+      operationId: Login and get internship application data
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      user_id:
+                        type: string
+                        example: "ABCD"
+                      status:
+                        type: object
+                        properties:
+                          :internship_id:
+                            type: string
+                            example: "Pending"
+                            enum:
+                              - Pending
+                              - Applied
+                              - HireVue
+                              - HireVue Complete
+                              - OA
+                              - OA Complete
+                              - Interview
+                              - Interview Complete
+                              - Offer
+                              - Accepted
+                              - Rejected
+                              - Declined
+        '401':
+          description: Unauthorized - invalid token
+        '404':
+          description: User not found
+        '500':
+          description: Server error
+      security:
+        - bearerAuth: []
+  /api/user/update:
+    post:
+      tags:
+        - user
+      summary: Update internship application data
+      operationId: Update internship application data
+      requestBody:
+        description: Update internship application data
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                internship_id:
+                  type: integer
+                  format: int64
+                  example: 1
+                status:
+                  type: string
+                  example: "Applied"
+                  enum:
+                    - Pending
+                    - Applied
+                    - HireVue
+                    - HireVue Complete
+                    - OA
+                    - OA Complete
+                    - Interview
+                    - Interview Complete
+                    - Offer
+                    - Accepted
+                    - Rejected
+                    - Declined
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "OK"
+        '400':
+          description: Invalid request body
+        '401':
+          description: Unauthorized - invalid token
+        '404':
+          description: User not found
+        '500':
+          description: Server error
+      security:
+        - bearerAuth: []
+
+
+components:
+  schemas:
+    Internship:
+      type: object
+      properties:
+        internship_id:
+          type: integer
+          format: int64
+          example: 1
+        company:
+          type: string
+          example: Google
+        role:
+          type: string
+          example: Software Engineering Intern
+        link:
+          type: string
+          example: https://google.com/careers
+        date_added:
+          type: string
+          example: 20 Aug 2023
+        is_summer:
+          type: boolean
+          example: true
+
+    InternshipData:
+      type: object
+      properties:
+        company:
+          type: string
+          example: Google
+        role:
+          type: string
+          example: Software Engineering Intern
+        link:
+          type: string
+          example: https://google.com/careers
+        is_summer:
+          type: boolean
+          example: true
+              
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

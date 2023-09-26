@@ -26,6 +26,7 @@ func GetInternshipsFromDB(db *sql.DB) (map[string][]models.Internship, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	// create map to store internships
 	internships := map[string][]models.Internship{
@@ -130,10 +131,12 @@ func SyncDBWithGitHub(db *sql.DB) error {
 // checkInternshipExists checks if an internship exists in the database
 func checkInternshipExists(db *sql.DB, internship models.Internship) (bool, error) {
 	// query database - company, role, summer to indicate unique internship
+	// TODO - optimise, don't need one query for each internship
 	rows, err := db.Query("SELECT * FROM internships WHERE company=$1 AND role=$2 AND is_summer=$3", internship.Company, internship.Role, internship.IsSummer)
 	if err != nil {
 		return false, err
 	}
+	defer rows.Close()
 
 	// check if rows exist
 	if rows.Next() {
@@ -178,13 +181,13 @@ func GetUserFromDB(db *sql.DB, token *auth.Token) (*models.User, error) {
 		return nil, err
 	}
 
+	// close rows
+	defer rows.Close()
+
 	// create user object
 	var user models.User
 	user.ID = token.UID
 	user.Status = make(map[int]string)
-
-	print("rows")
-	print(rows)
 
 	// iterate over rows
 	for rows.Next() {
@@ -203,7 +206,7 @@ func GetUserFromDB(db *sql.DB, token *auth.Token) (*models.User, error) {
 	}
 
 	// return user
-	log.Println(user)
+	log.Printf("User %+v logged in\n", user.ID)
 	return &user, nil
 }
 

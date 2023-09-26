@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"database/sql"
+	"html/template"
 	"log"
 	"net/http"
 	"strings"
@@ -24,14 +25,16 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	database.SyncDBWithGitHub(db)
 
 	// close database connection
 	defer db.Close()
 
-	// repeat job at 10pm everyday
+	// repeat sync every 30 minutes
 	ctab := crontab.New()
-	ctab.MustAddJob("0 22 * * 0-5", func() { database.SyncDBWithGitHub(db) })
+	ctab.MustAddJob("/5 * * * *", func() {
+		database.SyncDBWithGitHub(db)
+		log.Println("Routine sync complete")
+	})
 
 	// create Firebase app
 	app, _ := firebase.NewApp(context.Background(), nil)
@@ -47,6 +50,7 @@ func main() {
 
 func setupRouter(db *sql.DB, client *auth.Client) *gin.Engine {
 	r := gin.Default()
+	r.SetHTMLTemplate(template.Must(template.ParseFiles("templates/swagger.html")))
 	api := r.Group("/api")
 
 	// health check
@@ -59,6 +63,20 @@ func setupRouter(db *sql.DB, client *auth.Client) *gin.Engine {
 		handlers.GetInternships(ctx, db)
 	})
 
+	// Swagger UI
+	api.GET("/docs", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "swagger.html", gin.H{
+			"openapi_url":     "docs/openapi.json",
+			"title":           "Internships API",
+			"swagger_options": `{}`,
+		})
+	})
+
+	// OpenAPI JSON
+	api.GET("/docs/openapi.json", func(c *gin.Context) {
+		c.File("docs/openapi.json")
+	})
+
 	// post internship role
 	api.POST("/internships", handlers.PostInternship)
 
@@ -69,6 +87,13 @@ func setupRouter(db *sql.DB, client *auth.Client) *gin.Engine {
 	user.Use(func(c *gin.Context) {
 		// get token from header
 		idToken := c.GetHeader("Authorization")
+
+		// return error if no token
+		if idToken == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "No token"})
+			c.Abort()
+			return
+		}
 
 		// split token
 		idToken = strings.Split(idToken, " ")[1]
@@ -87,7 +112,7 @@ func setupRouter(db *sql.DB, client *auth.Client) *gin.Engine {
 	})
 
 	// verify token with middleware and get data from db handler
-	user.POST("/login", func(c *gin.Context) {
+	user.GET("", func(c *gin.Context) {
 		handlers.Login(c, db)
 	})
 

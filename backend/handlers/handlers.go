@@ -44,7 +44,7 @@ func PostInternship(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	c.JSON(http.StatusOK, gin.H{"status": "OK"})
 }
 
 func CreateIssue(internship models.InternshipData) error {
@@ -181,5 +181,5 @@ func Update(c *gin.Context, database *sql.DB) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": "Success"})
+	c.JSON(http.StatusOK, gin.H{"status": "OK"})
 }
