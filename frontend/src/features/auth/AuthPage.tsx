@@ -35,7 +35,7 @@ export default function AuthPage() {
             <Container fluid bg={"violet.1"}>
                 <Container
                     size={"lg"}
-                    p={"xl"}
+                    p={0}
                     sx={{ textAlign: "left" }}
                     h={"100svh"}
                 >
