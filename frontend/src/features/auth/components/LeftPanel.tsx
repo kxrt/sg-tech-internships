@@ -32,11 +32,13 @@ const LeftPanel = () => {
     return (
         <Center className={classes.root} p={"xl"}>
             {/* <Image src={CatIllustration} /> */}
-            <Title className={classes.title}>
-                Summer 2024{" "}
+            <Title className={classes.title} fz={"2em"} lh="2">
+                Singapore
+                <br />
+                Summer 2024 <br />
                 <Text component="span" className={classes.highlight} inherit>
-                    Internships
-                </Text>{" "}
+                    Tech Internships
+                </Text>
             </Title>
         </Center>
     );
