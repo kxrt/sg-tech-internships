@@ -7,6 +7,9 @@ import { MantineProvider } from "@mantine/core";
 import AuthForm from "./features/auth/components/AuthForm.tsx";
 import ResetPassword from "./features/auth/components/ResetPassword.tsx";
 import { ModalsProvider } from "@mantine/modals";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./config/firebase.ts";
+import { useAuthStore } from "./stores/AuthStore.ts";
 // import ReactGA from "react-ga4";
 
 // ReactGA.initialize(import.meta.env.VITE_GA_TRACKING_ID);
@@ -63,6 +66,14 @@ const theme = {
         },
     },
 };
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        useAuthStore.setState({ user: user });
+    } else {
+        useAuthStore.setState({ user: null });
+    }
+});
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>

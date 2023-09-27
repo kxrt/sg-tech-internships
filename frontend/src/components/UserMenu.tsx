@@ -7,13 +7,11 @@ import {
     UnstyledButton,
     createStyles,
 } from "@mantine/core";
-import { useState } from "react";
 import MdLogout from "../assets/MdLogout.svg";
 import MdExpandMore from "../assets/MdExpandMore.svg";
-import { User, onAuthStateChanged } from "firebase/auth";
-import { auth } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
 import { handleLogout } from "../features/auth/utils/AuthUtils";
+import { useAuthStore } from "../stores/AuthStore";
 
 const useStyles = createStyles((theme) => ({
     user: {
@@ -43,16 +41,9 @@ const useStyles = createStyles((theme) => ({
 
 const UserMenu = () => {
     const { classes } = useStyles();
-    const [user, setUser] = useState<User | null>(null);
     const navigate = useNavigate();
 
-    onAuthStateChanged(auth, (newUser) => {
-        if (newUser) {
-            setUser(newUser);
-        } else if (newUser == null) {
-            setUser(null);
-        }
-    });
+    const user = useAuthStore((state) => state.user);
 
     return (
         <>
