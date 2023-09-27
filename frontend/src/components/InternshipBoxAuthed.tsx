@@ -129,12 +129,16 @@ const InternshipBoxAuthed = ({
                     },
                 }
             )
-            .then((response) => {
-                console.log(response);
+            .then(() => {
+                toast.success("Status updated successfully", {
+                    position: "bottom-right",
+                    autoClose: 2000,
+                });
             })
             .catch(() => {
                 toast.error("Error updating status", {
                     position: "bottom-right",
+                    autoClose: 2000,
                 });
                 setValue(status ? status : "Pending");
             });
