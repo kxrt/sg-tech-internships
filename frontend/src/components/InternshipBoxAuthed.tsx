@@ -51,6 +51,11 @@ const COLOR_MAP: { [key: string]: string } = {
 const useStyles = createStyles((theme) => ({
     root: {
         containerType: "inline-size",
+        border: "1px solid #e0e0e0",
+        transition: "0.2s",
+        "&:hover": {
+            border: "1px solid #6161ff",
+        },
     },
     card: {
         display: "grid",
@@ -146,7 +151,7 @@ const InternshipBoxAuthed = ({
 
     return (
         <Paper
-            withBorder
+            // withBorder
             p={"xl"}
             radius={"md"}
             ta={"left"}
