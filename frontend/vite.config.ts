@@ -25,7 +25,7 @@ export default defineConfig(({ command, mode }) => {
                         target:
                             mode === "dev"
                                 ? "http://backend:8000"
-                                : "http://localhost:8080",
+                                : "http://localhost:8000",
                         // target: "http://localhost:8000", // development
                         changeOrigin: true,
                     },
