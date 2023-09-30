@@ -132,10 +132,17 @@ func SyncDBWithGitHub(db *sql.DB) error {
 func checkInternshipExists(db *sql.DB, internship models.Internship) (bool, error) {
 	// query database - company, role, summer to indicate unique internship
 	// TODO - optimise, don't need one query for each internship
-	rows, err := db.Query("SELECT * FROM internships WHERE company=$1 AND role=$2 AND is_summer=$3", internship.Company, internship.Role, internship.IsSummer)
+	stmt, err := db.Prepare("SELECT * FROM internships WHERE company=$1 AND role=$2 AND is_summer=$3")
 	if err != nil {
 		return false, err
 	}
+
+	// execute prepared statement
+	rows, err := stmt.Query(internship.Company, internship.Role, internship.IsSummer)
+	if err != nil {
+		return false, err
+	}
+
 	defer rows.Close()
 
 	// check if rows exist
@@ -173,9 +180,14 @@ func GetUserFromDB(db *sql.DB, token *auth.Token) (*models.User, error) {
 	}
 
 	// query database to check if user exists
-	rows, err := db.Query("SELECT user_id, internship_id, status FROM applications WHERE user_id = $1", token.UID)
+	stmt, err := db.Prepare("SELECT user_id, internship_id, status FROM applications WHERE user_id = $1")
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
 
-	// return error if error
+	// execute prepared statement
+	rows, err := stmt.Query(token.UID)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -220,8 +232,6 @@ func UpdateUser(db *sql.DB, token *auth.Token, ur models.UpdateRequest) error {
 
 	// execute prepared statement
 	_, err = stmt.Exec(ur.Status, token.UID, ur.InternshipID)
-
-	// return error if error
 	if err != nil {
 		return err
 	}
