@@ -171,6 +171,14 @@ func Update(c *gin.Context, database *sql.DB) {
 		return
 	}
 
+	// check if all statuses are valid
+	for _, status := range ur.Statuses {
+		if !status.IsValid() {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid status"})
+			return
+		}
+	}
+
 	// update user in database
 	err := db.UpdateUser(database, token, ur)
 
