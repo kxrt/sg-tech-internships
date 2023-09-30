@@ -180,7 +180,7 @@ func GetUserFromDB(db *sql.DB, token *auth.Token) (*models.User, error) {
 	}
 
 	// query database to check if user exists
-	stmt, err := db.Prepare("SELECT user_id, internship_id, ARRAY_AGG(status) AS statuses FROM applications WHERE user_id = $1 GROUP BY user_id, internship_id")
+	stmt, err := db.Prepare("SELECT internship_id, ARRAY_AGG(status) AS statuses FROM applications WHERE user_id = $1 GROUP BY user_id, internship_id")
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -199,16 +199,21 @@ func GetUserFromDB(db *sql.DB, token *auth.Token) (*models.User, error) {
 	// create user object
 	var user models.User
 	user.ID = token.UID
-	user.Statuses = make(map[int][]string)
+	user.Statuses = make(map[int][]models.Status)
 
 	// iterate over rows
 	for rows.Next() {
 		// scan row into user object
-		var throwawayID string
 		var internshipID int
-		var statuses []string
-		err = rows.Scan(&throwawayID, &internshipID, &statuses)
+		var statusesString string
+		err = rows.Scan(&internshipID, &statusesString)
 
+		if err != nil {
+			return nil, err
+		}
+
+		// convert statuses to slice
+		statuses, err := utils.ConvertStatusStringToArray(statusesString)
 		if err != nil {
 			return nil, err
 		}
@@ -218,14 +223,16 @@ func GetUserFromDB(db *sql.DB, token *auth.Token) (*models.User, error) {
 	}
 
 	// return user
-	log.Printf("User %+v logged in\n", user.ID)
+	log.Printf("User %+v fetched details\n", user.ID)
 	return &user, nil
 }
 
 func UpdateUser(db *sql.DB, token *auth.Token, ur models.UpdateRequest) error {
+	log.Printf("User %+v updated statuses %+v for internship %+v\n", token.UID, ur.Statuses, ur.InternshipID)
 	// start transaction
 	tx, err := db.Begin()
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 
@@ -235,6 +242,7 @@ func UpdateUser(db *sql.DB, token *auth.Token, ur models.UpdateRequest) error {
 	// delete all statuses for user
 	stmt, err := tx.Prepare("DELETE FROM applications WHERE user_id = $1 AND internship_id = $2")
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 	defer stmt.Close()
@@ -246,8 +254,9 @@ func UpdateUser(db *sql.DB, token *auth.Token, ur models.UpdateRequest) error {
 	}
 
 	// insert new statuses
-	stmt, err = tx.Prepare("INSERT INTO applications (user_id, internship_id, status) VALUES ($2, $3, $1) ON CONFLICT (user_id, internship_id, status) DO NOTHING")
+	stmt, err = tx.Prepare("INSERT INTO applications (user_id, internship_id, status) VALUES ($1, $2, $3) ON CONFLICT (user_id, internship_id, status) DO NOTHING")
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 
@@ -255,6 +264,7 @@ func UpdateUser(db *sql.DB, token *auth.Token, ur models.UpdateRequest) error {
 	for _, Status := range ur.Statuses {
 		_, err = stmt.Exec(token.UID, ur.InternshipID, Status)
 		if err != nil {
+			log.Println(err)
 			return err
 		}
 	}
@@ -262,6 +272,7 @@ func UpdateUser(db *sql.DB, token *auth.Token, ur models.UpdateRequest) error {
 	// commit transaction
 	err = tx.Commit()
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 

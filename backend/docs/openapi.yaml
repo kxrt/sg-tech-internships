@@ -92,7 +92,7 @@ paths:
                       user_id:
                         type: string
                         example: "ABCD"
-                      status:
+                      statuses:
                         type: object
                         properties:
                           :internship_id:
@@ -138,7 +138,7 @@ paths:
                   type: integer
                   format: int64
                   example: 1
-                status:
+                statuses:
                   type: array
                   items:
                     type: string

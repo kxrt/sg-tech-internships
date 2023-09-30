@@ -230,7 +230,7 @@
         },
         "type" : "object"
       },
-      "Login_and_get_internship_application_data_200_response_data_status" : {
+      "Login_and_get_internship_application_data_200_response_data_statuses" : {
         "properties" : {
           ":internship_id" : {
             "example" : [ "Applied", "OA" ],
@@ -249,8 +249,8 @@
             "example" : "ABCD",
             "type" : "string"
           },
-          "status" : {
-            "$ref" : "#/components/schemas/Login_and_get_internship_application_data_200_response_data_status"
+          "statuses" : {
+            "$ref" : "#/components/schemas/Login_and_get_internship_application_data_200_response_data_statuses"
           }
         },
         "type" : "object"
@@ -270,7 +270,7 @@
             "format" : "int64",
             "type" : "integer"
           },
-          "status" : {
+          "statuses" : {
             "example" : [ "Applied", "OA" ],
             "items" : {
               "enum" : [ "Pending", "Applied", "HireVue", "HireVue Complete", "OA", "OA Complete", "Interview", "Interview Complete", "Offer", "Accepted", "Rejected", "Declined" ],
