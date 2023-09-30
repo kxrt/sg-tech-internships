@@ -233,9 +233,12 @@
       "Login_and_get_internship_application_data_200_response_data_status" : {
         "properties" : {
           ":internship_id" : {
-            "enum" : [ "Pending", "Applied", "HireVue", "HireVue Complete", "OA", "OA Complete", "Interview", "Interview Complete", "Offer", "Accepted", "Rejected", "Declined" ],
-            "example" : "Pending",
-            "type" : "string"
+            "example" : [ "Applied", "OA" ],
+            "items" : {
+              "enum" : [ "Pending", "Applied", "HireVue", "HireVue Complete", "OA", "OA Complete", "Interview", "Interview Complete", "Offer", "Accepted", "Rejected", "Declined" ],
+              "type" : "string"
+            },
+            "type" : "array"
           }
         },
         "type" : "object"
@@ -268,9 +271,12 @@
             "type" : "integer"
           },
           "status" : {
-            "enum" : [ "Pending", "Applied", "HireVue", "HireVue Complete", "OA", "OA Complete", "Interview", "Interview Complete", "Offer", "Accepted", "Rejected", "Declined" ],
-            "example" : "Applied",
-            "type" : "string"
+            "example" : [ "Applied", "OA" ],
+            "items" : {
+              "enum" : [ "Pending", "Applied", "HireVue", "HireVue Complete", "OA", "OA Complete", "Interview", "Interview Complete", "Offer", "Accepted", "Rejected", "Declined" ],
+              "type" : "string"
+            },
+            "type" : "array"
           }
         },
         "type" : "object"

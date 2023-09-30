@@ -17,11 +17,11 @@ type InternshipData struct {
 }
 
 type User struct {
-	ID     string         `json:"user_id"`
-	Status map[int]string `json:"status"`
+	ID       string           `json:"user_id"`
+	Statuses map[int][]string `json:"statuses"`
 }
 
 type UpdateRequest struct {
-	InternshipID int    `json:"internship_id"`
-	Status       string `json:"status"`
+	InternshipID int      `json:"internship_id"`
+	Statuses     []string `json:"statuses"`
 }

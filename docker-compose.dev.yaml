@@ -1,7 +1,7 @@
 services:
   # service to get intership data
   backend:
-    build: 
+    build:
       context: ./backend
       dockerfile: Dockerfile.dev
     volumes:
@@ -19,7 +19,7 @@ services:
 
   # frontend service
   frontend:
-    build: 
+    build:
       context: ./frontend
     volumes:
       - "./frontend/src:/frontend/src"
@@ -38,7 +38,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./db:/docker-entrypoint-initdb.d
       - pg-data:/var/lib/postgresql/data
 volumes:
   pg-data:

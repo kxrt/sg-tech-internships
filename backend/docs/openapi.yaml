@@ -96,21 +96,23 @@ paths:
                         type: object
                         properties:
                           :internship_id:
-                            type: string
-                            example: "Pending"
-                            enum:
-                              - Pending
-                              - Applied
-                              - HireVue
-                              - HireVue Complete
-                              - OA
-                              - OA Complete
-                              - Interview
-                              - Interview Complete
-                              - Offer
-                              - Accepted
-                              - Rejected
-                              - Declined
+                            type: array
+                            items:
+                              type: string
+                              enum:
+                                - Pending
+                                - Applied
+                                - HireVue
+                                - HireVue Complete
+                                - OA
+                                - OA Complete
+                                - Interview
+                                - Interview Complete
+                                - Offer
+                                - Accepted
+                                - Rejected
+                                - Declined
+                            example: [ "Applied", "OA" ]
         '401':
           description: Unauthorized - invalid token
         '404':
@@ -137,21 +139,23 @@ paths:
                   format: int64
                   example: 1
                 status:
-                  type: string
-                  example: "Applied"
-                  enum:
-                    - Pending
-                    - Applied
-                    - HireVue
-                    - HireVue Complete
-                    - OA
-                    - OA Complete
-                    - Interview
-                    - Interview Complete
-                    - Offer
-                    - Accepted
-                    - Rejected
-                    - Declined
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      - Pending
+                      - Applied
+                      - HireVue
+                      - HireVue Complete
+                      - OA
+                      - OA Complete
+                      - Interview
+                      - Interview Complete
+                      - Offer
+                      - Accepted
+                      - Rejected
+                      - Declined
+                  example: [ "Applied", "OA" ]
         required: true
       responses:
         '200':

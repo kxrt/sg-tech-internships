@@ -180,7 +180,7 @@ func GetUserFromDB(db *sql.DB, token *auth.Token) (*models.User, error) {
 	}
 
 	// query database to check if user exists
-	stmt, err := db.Prepare("SELECT user_id, internship_id, status FROM applications WHERE user_id = $1")
+	stmt, err := db.Prepare("SELECT user_id, internship_id, ARRAY_AGG(status) AS statuses FROM applications WHERE user_id = $1 GROUP BY user_id, internship_id")
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -199,22 +199,22 @@ func GetUserFromDB(db *sql.DB, token *auth.Token) (*models.User, error) {
 	// create user object
 	var user models.User
 	user.ID = token.UID
-	user.Status = make(map[int]string)
+	user.Statuses = make(map[int][]string)
 
 	// iterate over rows
 	for rows.Next() {
 		// scan row into user object
 		var throwawayID string
 		var internshipID int
-		var status string
-		err = rows.Scan(&throwawayID, &internshipID, &status)
+		var statuses []string
+		err = rows.Scan(&throwawayID, &internshipID, &statuses)
 
 		if err != nil {
 			return nil, err
 		}
 
 		// add internshipID and status to user
-		user.Status[internshipID] = status
+		user.Statuses[internshipID] = statuses
 	}
 
 	// return user
@@ -223,15 +223,44 @@ func GetUserFromDB(db *sql.DB, token *auth.Token) (*models.User, error) {
 }
 
 func UpdateUser(db *sql.DB, token *auth.Token, ur models.UpdateRequest) error {
-	// update user in database
-	stmt, err := db.Prepare("INSERT INTO applications (user_id, internship_id, status) VALUES ($2, $3, $1) ON CONFLICT (user_id, internship_id) DO UPDATE SET status = $1")
+	// start transaction
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+
+	// defer rollback
+	defer tx.Rollback()
+
+	// delete all statuses for user
+	stmt, err := tx.Prepare("DELETE FROM applications WHERE user_id = $1 AND internship_id = $2")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
 	// execute prepared statement
-	_, err = stmt.Exec(ur.Status, token.UID, ur.InternshipID)
+	_, err = stmt.Exec(token.UID, ur.InternshipID)
+	if err != nil {
+		return err
+	}
+
+	// insert new statuses
+	stmt, err = tx.Prepare("INSERT INTO applications (user_id, internship_id, status) VALUES ($2, $3, $1) ON CONFLICT (user_id, internship_id, status) DO NOTHING")
+	if err != nil {
+		return err
+	}
+
+	// execute prepared statement
+	for _, Status := range ur.Statuses {
+		_, err = stmt.Exec(token.UID, ur.InternshipID, Status)
+		if err != nil {
+			return err
+		}
+	}
+
+	// commit transaction
+	err = tx.Commit()
 	if err != nil {
 		return err
 	}

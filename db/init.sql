@@ -21,5 +21,5 @@ CREATE TABLE IF NOT EXISTS applications (
     user_id VARCHAR(255) REFERENCES users(user_id),
     internship_id INT REFERENCES internships(internship_id),
     status VARCHAR(255) NOT NULL,
-    PRIMARY KEY (user_id, internship_id)
+    PRIMARY KEY (user_id, internship_id, status)
 );
