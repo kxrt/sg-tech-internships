@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { SearchBar } from "./SearchBar";
 import InternshipListAuthed from "./InternshipListAuthed";
 import { useAuthStore } from "../stores/AuthStore";
+import { STATUSES } from "./InternshipBoxAuthed";
 
 export type Internship = {
     internship_id: string;
@@ -13,9 +14,11 @@ export type Internship = {
     is_summer: boolean;
 };
 
-export type Status = {
-    [key: string]: string;
+export type Statuses = {
+    [internship_id: string]: Status[];
 };
+
+export type Status = (typeof STATUSES)[number];
 
 export function Internships({
     reference,
@@ -31,7 +34,7 @@ export function Internships({
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [lastUpdated, setLastUpdated] = useState<string>("");
     const [sortBy, setSortBy] = useState<string>("A-Z");
-    const [statuses, setStatuses] = useState<Status>({});
+    const [statuses, setStatuses] = useState<Statuses>({});
     const user = useAuthStore((state) => state.user);
 
     // run once on first render
@@ -54,7 +57,8 @@ export function Internships({
                     })
                     .then((response) => JSON.parse(response.data.data))
                     .then((res) => {
-                        setStatuses(res.status);
+                        console.log(res.statuses);
+                        setStatuses(res.statuses);
                     });
             }
         };

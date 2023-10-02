@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
-import { Internship } from "./Internships";
+import { Internship, Status } from "./Internships";
 import {
     Badge,
     Box,
     Button,
     Group,
     Image,
+    MultiSelect,
     Paper,
-    Select,
     Text,
     createStyles,
 } from "@mantine/core";
@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useAuthStore } from "../stores/AuthStore";
 
-const STATUSES = [
+export const STATUSES = [
     "Pending",
     "Applied",
     "HireVue",
@@ -31,7 +31,7 @@ const STATUSES = [
     "Accepted",
     "Rejected",
     "Declined",
-];
+] as const;
 
 const COLOR_MAP: { [key: string]: string } = {
     Pending: "gray",
@@ -106,14 +106,14 @@ const InternshipBoxAuthed = ({
     status,
 }: {
     internship: Internship;
-    status: string;
+    status: Status[];
 }) => {
     const { classes } = useStyles();
-    const [value, setValue] = useState<string>(status ? status : "Pending");
+    const [value, setValue] = useState<Status[]>([]);
     const [isEditing, setIsEditing] = useState<boolean>(false);
 
     useEffect(() => {
-        setValue(status ? status : "Pending");
+        setValue(status);
     }, [status]);
 
     const user = useAuthStore((state) => state.user);
@@ -125,7 +125,7 @@ const InternshipBoxAuthed = ({
                 "/api/user/update",
                 JSON.stringify({
                     internship_id: internship.internship_id,
-                    status: value,
+                    statuses: value,
                 }),
 
                 {
@@ -145,7 +145,7 @@ const InternshipBoxAuthed = ({
                     position: "bottom-right",
                     autoClose: 2000,
                 });
-                setValue(status ? status : "Pending");
+                setValue(status);
             });
     };
 
@@ -196,19 +196,22 @@ const InternshipBoxAuthed = ({
                             >
                                 <Image src={SaveIcon} height={16} width={16} />
                             </Button>
-                            <Select
-                                data={STATUSES}
+                            <MultiSelect
+                                data={STATUSES.slice(1)}
                                 value={value}
-                                onChange={(newValue) => {
-                                    setValue(
-                                        newValue == null ? "Pending" : newValue
+                                onChange={(newValue: Status[]) => {
+                                    newValue.sort(
+                                        (a, b) =>
+                                            STATUSES.indexOf(a) -
+                                            STATUSES.indexOf(b)
                                     );
+                                    setValue(newValue);
+                                    console.log(newValue);
                                 }}
                                 className={classes.status}
                                 searchable
                                 clearable
                                 withinPortal
-                                placeholder="Pending"
                                 styles={(theme) => ({
                                     item: {
                                         "&[data-selected]": {
@@ -223,7 +226,7 @@ const InternshipBoxAuthed = ({
                                         "&[data-hovered]": {},
                                     },
                                 })}
-                            ></Select>
+                            ></MultiSelect>
                         </Group>
                     ) : (
                         <Group className={classes.status}>
@@ -241,10 +244,18 @@ const InternshipBoxAuthed = ({
                             <Badge
                                 radius="md"
                                 size="lg"
-                                color={COLOR_MAP[value]}
+                                color={
+                                    COLOR_MAP[
+                                        value.length
+                                            ? value[value.length - 1]
+                                            : "Pending"
+                                    ]
+                                }
                                 h={36}
                             >
-                                {value}
+                                {value.length
+                                    ? value[value.length - 1]
+                                    : "Pending"}
                             </Badge>
                         </Group>
                     )

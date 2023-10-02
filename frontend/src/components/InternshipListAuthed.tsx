@@ -1,6 +1,6 @@
 import { Center, SimpleGrid } from "@mantine/core";
 import InternshipBoxAuthed from "./InternshipBoxAuthed";
-import { Internship, Status } from "./Internships";
+import { Internship, Statuses } from "./Internships";
 
 const InternshipListAuthed = ({
     internships,
@@ -10,7 +10,7 @@ const InternshipListAuthed = ({
     reference,
 }: {
     internships: Internship[];
-    statuses: Status;
+    statuses: Statuses;
     title: string;
     searchQuery: string;
     reference?: React.MutableRefObject<null | HTMLDivElement> | null;
@@ -48,7 +48,11 @@ const InternshipListAuthed = ({
                                 <InternshipBoxAuthed
                                     internship={internship}
                                     key={idx}
-                                    status={statuses[internship.internship_id]}
+                                    status={
+                                        statuses[internship.internship_id]
+                                            ? statuses[internship.internship_id]
+                                            : []
+                                    }
                                 />
                             );
                         })}
