@@ -10,13 +10,12 @@ import {
 import MdLogout from "../assets/MdLogout.svg";
 import MdExpandMore from "../assets/MdExpandMore.svg";
 import { useNavigate } from "react-router-dom";
-import { handleLogout } from "../features/auth/utils/AuthUtils";
-import { useAuthStore } from "../stores/AuthStore";
+import { handleLogout } from "../utils/AuthUtils";
+import { useAuthStore } from "../../../stores/AuthStore";
 
 const useStyles = createStyles((theme) => ({
     user: {
-        color:
-            theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
+        color: theme.black,
         padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
         borderRadius: theme.radius.sm,
         transition: "background-color 100ms ease",

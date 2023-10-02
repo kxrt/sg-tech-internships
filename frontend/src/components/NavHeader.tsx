@@ -7,7 +7,7 @@ import {
     Header,
     HeaderProps,
 } from "@mantine/core";
-import UserMenu from "./UserMenu";
+import UserMenu from "../features/auth/components/UserMenu";
 
 const useStyles = createStyles((theme) => ({
     root: {

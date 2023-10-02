@@ -1,24 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { SearchBar } from "./SearchBar";
-import InternshipListAuthed from "./InternshipListAuthed";
+import InternshipList from "./InternshipList";
 import { useAuthStore } from "../stores/AuthStore";
-import { STATUSES } from "./InternshipBoxAuthed";
-
-export type Internship = {
-    internship_id: string;
-    company: string;
-    role: string;
-    link: string;
-    date_added: string;
-    is_summer: boolean;
-};
-
-export type Statuses = {
-    [internship_id: string]: Status[];
-};
-
-export type Status = (typeof STATUSES)[number];
+import { Internship, Statuses } from "../types";
+import { toast } from "react-toastify";
 
 export function Internships({
     reference,
@@ -45,7 +31,10 @@ export function Internships({
             setOffcycleInternships(response.data.data.offcycle);
             setSortBy("Date");
         });
+    }, []);
 
+    // get user statuses if authenticated
+    useEffect(() => {
         const getStatuses = async () => {
             if (user) {
                 const token = await user.getIdToken();
@@ -57,8 +46,13 @@ export function Internships({
                     })
                     .then((response) => JSON.parse(response.data.data))
                     .then((res) => {
-                        console.log(res.statuses);
                         setStatuses(res.statuses);
+                    })
+                    .catch(() => {
+                        toast.error("Error retrieving statuses", {
+                            position: "bottom-right",
+                            autoClose: 2000,
+                        });
                     });
             }
         };
@@ -146,26 +140,14 @@ export function Internships({
                     <option value="A-Z">A-Z</option>
                 </select>
             </div>
-            {/* <InternshipList
-                internships={summerInternships}
-                searchQuery={searchQuery}
-                title="Summer"
-            />
-            <br />
             <InternshipList
-                internships={offcycleInternships}
-                searchQuery={searchQuery}
-                title="Offcycle"
-                reference={reference}
-            /> */}
-            <InternshipListAuthed
                 internships={summerInternships}
                 statuses={statuses}
                 searchQuery={searchQuery}
                 title="Summer"
                 reference={reference}
             />
-            <InternshipListAuthed
+            <InternshipList
                 internships={offcycleInternships}
                 statuses={statuses}
                 searchQuery={searchQuery}
