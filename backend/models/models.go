@@ -30,7 +30,6 @@ type UpdateRequest struct {
 type Status string
 
 const (
-	Pending           Status = "Pending"
 	Applied           Status = "Applied"
 	HireVue           Status = "HireVue"
 	HireVueComplete   Status = "HireVue Complete"
@@ -47,7 +46,7 @@ const (
 // IsValid checks if a Status is valid
 func (s Status) IsValid() bool {
 	switch s {
-	case Pending, Applied, HireVue, HireVueComplete, OA, OAComplete, Interview, InterviewComplete, Offer, Accepted, Rejected, Declined:
+	case Applied, HireVue, HireVueComplete, OA, OAComplete, Interview, InterviewComplete, Offer, Accepted, Rejected, Declined:
 		return true
 	}
 	return false

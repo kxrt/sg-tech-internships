@@ -2,6 +2,7 @@ package utils
 
 import (
 	"backend/models"
+	"errors"
 	"strings"
 )
 
@@ -18,7 +19,12 @@ func ConvertStatusStringToArray(s string) ([]models.Status, error) {
 
 	// convert strings to Status objects and trim spaces
 	for i := range statusArray {
-		statusObjectArray[i] = models.Status(strings.TrimSpace(statusArray[i]))
+		preparedString := strings.ReplaceAll(strings.TrimSpace(statusArray[i]), "\"", "")
+		if models.Status(preparedString).IsValid() {
+			statusObjectArray[i] = models.Status(preparedString)
+		} else {
+			return nil, errors.New("invalid status")
+		}
 	}
 
 	// return array

@@ -235,7 +235,7 @@
           ":internship_id" : {
             "example" : [ "Applied", "OA" ],
             "items" : {
-              "enum" : [ "Pending", "Applied", "HireVue", "HireVue Complete", "OA", "OA Complete", "Interview", "Interview Complete", "Offer", "Accepted", "Rejected", "Declined" ],
+              "enum" : [ "Applied", "HireVue", "HireVue Complete", "OA", "OA Complete", "Interview", "Interview Complete", "Offer", "Accepted", "Rejected", "Declined" ],
               "type" : "string"
             },
             "type" : "array"
@@ -273,7 +273,7 @@
           "statuses" : {
             "example" : [ "Applied", "OA" ],
             "items" : {
-              "enum" : [ "Pending", "Applied", "HireVue", "HireVue Complete", "OA", "OA Complete", "Interview", "Interview Complete", "Offer", "Accepted", "Rejected", "Declined" ],
+              "enum" : [ "Applied", "HireVue", "HireVue Complete", "OA", "OA Complete", "Interview", "Interview Complete", "Offer", "Accepted", "Rejected", "Declined" ],
               "type" : "string"
             },
             "type" : "array"
