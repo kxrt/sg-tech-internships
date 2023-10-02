@@ -11,9 +11,9 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./config/firebase.ts";
 import { useAuthStore } from "./stores/AuthStore.ts";
 import { ErrorPage } from "./ErrorPage.tsx";
-// import ReactGA from "react-ga4";
+import ReactGA from "react-ga4";
 
-// ReactGA.initialize(import.meta.env.VITE_GA_TRACKING_ID);
+ReactGA.initialize(import.meta.env.VITE_GA_TRACKING_ID);
 
 const router = createBrowserRouter([
     {
