@@ -100,7 +100,6 @@ paths:
                             items:
                               type: string
                               enum:
-                                - Pending
                                 - Applied
                                 - HireVue
                                 - HireVue Complete
@@ -143,7 +142,6 @@ paths:
                   items:
                     type: string
                     enum:
-                      - Pending
                       - Applied
                       - HireVue
                       - HireVue Complete
