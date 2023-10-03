@@ -6,6 +6,8 @@ import {
     Title,
     Header,
     HeaderProps,
+    Button,
+    Indicator,
 } from "@mantine/core";
 import UserMenu from "../features/auth/components/UserMenu";
 
@@ -20,6 +22,7 @@ const useStyles = createStyles((theme) => ({
         justifyContent: "space-between",
         alignItems: "center",
         height: "100%",
+        gap: theme.spacing.sm,
     },
 
     title: {
@@ -55,6 +58,18 @@ export function NavHeader(props: HeaderProps) {
                         Internships
                     </Text>{" "}
                 </Title>
+                <Indicator
+                    inline
+                    label="Coming soon"
+                    size={14}
+                    color="gray"
+                    position="bottom-center"
+                >
+                    <Button disabled variant="subtle">
+                        Process Tracking
+                    </Button>
+                </Indicator>
+
                 <UserMenu />
             </Container>
         </Header>

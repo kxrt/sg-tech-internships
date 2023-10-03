@@ -15,6 +15,7 @@ import { useAuthStore } from "../../../stores/AuthStore";
 
 const useStyles = createStyles((theme) => ({
     user: {
+        flexWrap: "nowrap",
         color: theme.black,
         padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
         borderRadius: theme.radius.sm,
