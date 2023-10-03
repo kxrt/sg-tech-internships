@@ -10,6 +10,7 @@ import { Footer } from "./components/Footer";
 
 import { AppShell } from "@mantine/core";
 import { NavHeader } from "./components/NavHeader";
+import AnnoucementModal from "./components/AnnouncementModal";
 
 function App() {
     const [openModal, setOpenModal] = useState<boolean>(false);
@@ -26,6 +27,9 @@ function App() {
     return (
         <>
             <AppShell fixed header={<NavHeader height={64} children={null} />}>
+                {localStorage.getItem("hasViewedAnnouncement") == null && (
+                    <AnnoucementModal />
+                )}
                 {openModal && <ModalForm setOpenModal={setOpenModal} />}
                 <Header
                     setOpenModal={setOpenModal}
