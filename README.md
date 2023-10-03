@@ -85,8 +85,8 @@ Return format:
 {
   "data": {
 	"user_id": "ABCD",
-	"status": {
-		"1": "Applied" // internship_id: status
+	"statuses": {
+		"1": ["Applied", "OA"] // internship_id: statuses
 		},
 	}
 }
@@ -100,7 +100,7 @@ Request body:
 ```
 {
   "internship_id": 1,
-  "status": "Applied"
+  "statuses": ["Applied", "OA"]
 }
 ```
 
