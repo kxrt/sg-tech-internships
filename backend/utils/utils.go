@@ -3,6 +3,7 @@ package utils
 import (
 	"backend/models"
 	"errors"
+	"sort"
 	"strings"
 )
 
@@ -26,6 +27,8 @@ func ConvertStatusStringToArray(s string) ([]models.Status, error) {
 			return nil, errors.New("invalid status")
 		}
 	}
+
+	sort.Sort(models.ByStatus(statusObjectArray))
 
 	// return array
 	return statusObjectArray, nil
