@@ -59,7 +59,7 @@ const AnnoucementModal = () => {
                         Try it out now!
                     </Text>
                     <Button
-                        color="violet"
+                        variant="cta"
                         px={"3rem"}
                         onClick={() => {
                             close();
