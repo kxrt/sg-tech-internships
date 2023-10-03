@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { useAuthStore } from "../stores/AuthStore";
 import axios from "axios";
 import { toast } from "react-toastify";
+import ReactGA from "react-ga4";
 
 const COLOR_MAP: { [key: string]: string } = {
     Pending: "gray",
@@ -62,6 +63,10 @@ const InternshipCardStatus = ({
 
     const handleStatusUpdate = async () => {
         const token = await user?.getIdToken();
+        ReactGA.event({
+            category: "User",
+            action: "Update application status",
+        });
         axios
             .post(
                 "/api/user/update",

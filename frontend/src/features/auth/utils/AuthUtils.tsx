@@ -9,12 +9,17 @@ import { toast } from "react-toastify";
 import { auth, googleAuthProvider } from "../../../config/firebase";
 import { modals } from "@mantine/modals";
 import { Text } from "@mantine/core";
+import ReactGA from "react-ga4";
 
 const parseFirebaseAuthError = (errorCode: string): string => {
     return errorCode.substring(5, errorCode.length).replaceAll("-", " ");
 };
 
 export const handleGoogleOAuth = () => {
+    ReactGA.event({
+        category: "User",
+        action: "Google Oauth",
+    });
     signInWithPopup(auth, googleAuthProvider)
         .then((result) => {
             // The signed-in user info.
@@ -41,6 +46,10 @@ export const handleGoogleOAuth = () => {
 };
 
 export const handleRegister = (email: string, password: string) => {
+    ReactGA.event({
+        category: "User",
+        action: "Created an Account",
+    });
     createUserWithEmailAndPassword(auth, email, password)
         .then(() => {
             toast.success("Your account has been registered", {
@@ -65,6 +74,10 @@ export const handleRegister = (email: string, password: string) => {
 };
 
 export const handleLogin = (email: string, password: string) => {
+    ReactGA.event({
+        category: "User",
+        action: "Signed in",
+    });
     signInWithEmailAndPassword(auth, email, password)
         .then((result) => {
             const user = result.user;
@@ -90,6 +103,10 @@ export const handleLogin = (email: string, password: string) => {
 };
 
 export const handleResetPassword = (email: string) => {
+    ReactGA.event({
+        category: "User",
+        action: "Reset password",
+    });
     sendPasswordResetEmail(auth, email)
         .then(() => {
             toast.success("Password reset email sent", {
@@ -114,6 +131,10 @@ export const handleResetPassword = (email: string) => {
 };
 
 export const handleLogout = () => {
+    ReactGA.event({
+        category: "User",
+        action: "Logged out",
+    });
     modals.openConfirmModal({
         title: "Logout",
         centered: true,
