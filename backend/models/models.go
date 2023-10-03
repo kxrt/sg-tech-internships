@@ -51,3 +51,25 @@ func (s Status) IsValid() bool {
 	}
 	return false
 }
+
+// ByStatus implements sort.Interface based on the Status field
+type ByStatus []Status
+
+func (s ByStatus) Len() int { return len(s) }
+func (s ByStatus) Less(i, j int) bool {
+	order := map[Status]int{
+		"Applied":            0,
+		"HireVue":            1,
+		"HireVue Complete":   2,
+		"OA":                 3,
+		"OA Complete":        4,
+		"Interview":          5,
+		"Interview Complete": 6,
+		"Offer":              7,
+		"Accepted":           8,
+		"Rejected":           9,
+		"Declined":           10,
+	}
+	return order[s[i]] < order[s[j]]
+}
+func (s ByStatus) Swap(i, j int) { s[i], s[j] = s[j], s[i] }

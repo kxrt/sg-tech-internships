@@ -40,7 +40,7 @@ func ExtractTables(data string) ([]models.Internship, []models.Internship, error
 	for _, row := range rows {
 		// check for invalid regex parsing
 		if len(row) != 2 {
-			return nil, nil, errors.New("Invalid regex parsing")
+			return nil, nil, errors.New("invalid regex parsing")
 		}
 
 		// skip header rows
