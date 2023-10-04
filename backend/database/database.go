@@ -40,7 +40,7 @@ func GetInternshipsFromDB(db *sql.DB) (map[string][]models.Internship, error) {
 		var internship models.Internship
 
 		// scan row into internship object
-		err := rows.Scan(&internship.ID, &internship.Company, &internship.Role, &internship.Link, &internship.DateAdded, &internship.IsSummer)
+		err := rows.Scan(&internship.ID, &internship.Company, &internship.Role, &internship.Link, &internship.DateAdded, &internship.IsSummer, &internship.IsOpen)
 		if err != nil {
 			return nil, err
 		}
@@ -68,14 +68,14 @@ func GetInternshipsFromDB(db *sql.DB) (map[string][]models.Internship, error) {
 // CreateInternship creates a new internship in the database
 func CreateInternship(db *sql.DB, internship models.Internship) error {
 	// insert into database prepared statement
-	stmt, err := db.Prepare("INSERT INTO internships (company, role, link, date_added, is_summer) VALUES ($1, $2, $3, $4, $5)")
+	stmt, err := db.Prepare("INSERT INTO internships (company, role, link, date_added, is_summer, is_open) VALUES ($1, $2, $3, $4, $5, $6)")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
 	// execute prepared statement
-	_, err = stmt.Exec(internship.Company, internship.Role, internship.Link, internship.DateAdded, internship.IsSummer)
+	_, err = stmt.Exec(internship.Company, internship.Role, internship.Link, internship.DateAdded, internship.IsSummer, internship.IsOpen)
 	if err != nil {
 		return err
 	}
@@ -94,6 +94,7 @@ func SyncDBWithGitHub(db *sql.DB) error {
 
 	// for each internship, check if company and role are in db
 	for _, internship := range internships["summer"] {
+		log.Println(internship.Company, internship.Role, internship.IsSummer, internship.IsOpen)
 		// check if internship exists
 		exists, err := checkInternshipExists(db, internship)
 		if err != nil {
@@ -106,10 +107,21 @@ func SyncDBWithGitHub(db *sql.DB) error {
 			if err != nil {
 				return err
 			}
+		} else {
+			// update is_open
+			stmt, err := db.Prepare("UPDATE internships SET is_open = $1 WHERE company = $2 and role = $3 and is_summer = $4")
+			if err != nil {
+				return err
+			}
+			_, err = stmt.Exec(internship.IsOpen, internship.Company, internship.Role, internship.IsSummer)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
 	for _, internship := range internships["offcycle"] {
+		log.Println(internship.Company, internship.Role, internship.IsSummer, internship.IsOpen)
 		// check if internship exists
 		exists, err := checkInternshipExists(db, internship)
 		if err != nil {
@@ -119,6 +131,16 @@ func SyncDBWithGitHub(db *sql.DB) error {
 		// if internship does not exist, create it
 		if !exists {
 			err := CreateInternship(db, internship)
+			if err != nil {
+				return err
+			}
+		} else {
+			// update is_open
+			stmt, err := db.Prepare("UPDATE internships SET is_open = $1 WHERE company = $2 and role = $3 and is_summer = $4")
+			if err != nil {
+				return err
+			}
+			_, err = stmt.Exec(internship.IsOpen, internship.Company, internship.Role, internship.IsSummer)
 			if err != nil {
 				return err
 			}
@@ -146,12 +168,8 @@ func checkInternshipExists(db *sql.DB, internship models.Internship) (bool, erro
 	defer rows.Close()
 
 	// check if rows exist
-	if rows.Next() {
-		return true, nil
-	}
-
-	// return false
-	return false, nil
+	companyExists := rows.Next()
+	return companyExists, nil
 }
 
 func GetUserFromDB(db *sql.DB, token *auth.Token) (*models.User, error) {
@@ -172,8 +190,6 @@ func GetUserFromDB(db *sql.DB, token *auth.Token) (*models.User, error) {
 
 		// execute prepared statement
 		_, err = stmt.Exec(token.UID, token.Claims["email"])
-
-		// return error if error
 		if err != nil {
 			return nil, err
 		}

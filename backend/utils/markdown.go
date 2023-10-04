@@ -30,6 +30,7 @@ func FetchData() (string, error) {
 }
 
 // extract table data from markdown
+// sample: | Company | Role | [Open](link) | 01 Jan 2000 |
 func ExtractTables(data string) ([]models.Internship, []models.Internship, error) {
 	tableRegex := regexp.MustCompile(`\|([\s\S]*?)\|\n`)
 	rows := tableRegex.FindAllStringSubmatch(data, -1)
@@ -58,8 +59,16 @@ func ExtractTables(data string) ([]models.Internship, []models.Internship, error
 			return nil, nil, errors.New("invalid data")
 		}
 
-		// application links are in the form [Open](link)
-		link := strings.TrimSuffix(strings.TrimPrefix(strings.TrimSpace(data[2]), "[Open]("), ")")
+		// application links are in the form [Open](link) or [Closed](link)
+		var link string
+		var isOpen bool
+		if strings.Contains(data[2], "[Closed]") {
+			link = strings.TrimSuffix(strings.TrimPrefix(strings.TrimSpace(data[2]), "[Closed]("), ")")
+			isOpen = false
+		} else {
+			link = strings.TrimSuffix(strings.TrimPrefix(strings.TrimSpace(data[2]), "[Open]("), ")")
+			isOpen = true
+		}
 
 		// create internship object
 		internship := models.Internship{
@@ -68,6 +77,7 @@ func ExtractTables(data string) ([]models.Internship, []models.Internship, error
 			Link:      link,
 			DateAdded: strings.TrimSpace(data[3]),
 			IsSummer:  isSummer,
+			IsOpen:    isOpen,
 		}
 
 		if isSummer {
