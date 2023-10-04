@@ -7,6 +7,7 @@ type Internship struct {
 	Link      string `json:"link"`
 	DateAdded string `json:"date_added"`
 	IsSummer  bool   `json:"is_summer"`
+	IsOpen    bool   `json:"is_open"`
 }
 
 type InternshipData struct {
@@ -14,6 +15,7 @@ type InternshipData struct {
 	Role     string `json:"role"`
 	Link     string `json:"link"`
 	IsSummer bool   `json:"is_summer"`
+	IsOpen   bool   `json:"is_open"`
 }
 
 type User struct {

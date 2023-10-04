@@ -32,6 +32,7 @@ func main() {
 	// repeat sync every 30 minutes
 	ctab := crontab.New()
 	ctab.MustAddJob("/5 * * * *", func() {
+		log.Println("Starting sync")
 		database.SyncDBWithGitHub(db)
 		log.Println("Routine sync complete")
 	})
