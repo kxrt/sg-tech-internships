@@ -11,9 +11,11 @@ import { Footer } from "./components/Footer";
 import { AppShell } from "@mantine/core";
 import { NavHeader } from "./components/NavHeader";
 import AnnoucementModal from "./components/AnnouncementModal";
+import { Category } from "./types";
 
 function App() {
     const [openModal, setOpenModal] = useState<boolean>(false);
+    const [category, setCategory] = useState<Category>("Summer");
     const ref = useRef<null | HTMLDivElement>(null);
 
     useMemo(() => {
@@ -26,7 +28,17 @@ function App() {
 
     return (
         <>
-            <AppShell fixed header={<NavHeader height={64} children={null} />}>
+            <AppShell
+                fixed
+                header={
+                    <NavHeader
+                        height={64}
+                        curCategory={category}
+                        setCategory={setCategory}
+                        children={null}
+                    />
+                }
+            >
                 {localStorage.getItem("hasViewedAnnouncement") == null && (
                     <AnnoucementModal />
                 )}
@@ -35,7 +47,7 @@ function App() {
                     setOpenModal={setOpenModal}
                     handleScroll={handleScroll}
                 />
-                <Internships reference={ref} />
+                <Internships reference={ref} category={category} />
                 <Footer />
                 <ToastContainer
                     position="bottom-center"

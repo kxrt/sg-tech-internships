@@ -3,13 +3,15 @@ import { useEffect, useState } from "react";
 import { SearchBar } from "./SearchBar";
 import InternshipList from "./InternshipList";
 import { useAuthStore } from "../stores/AuthStore";
-import { Internship, Statuses } from "../types";
+import { Category, Internship, Statuses } from "../types";
 import { toast } from "react-toastify";
 
 export function Internships({
     reference,
+    category,
 }: {
     reference?: React.MutableRefObject<HTMLDivElement | null> | null;
+    category: Category;
 }) {
     const [summerInternships, setSummerInternships] = useState<Internship[]>(
         []
@@ -140,20 +142,23 @@ export function Internships({
                     <option value="A-Z">A-Z</option>
                 </select>
             </div>
-            <InternshipList
-                internships={summerInternships}
-                statuses={statuses}
-                searchQuery={searchQuery}
-                title="Summer"
-                reference={reference}
-            />
-            <InternshipList
-                internships={offcycleInternships}
-                statuses={statuses}
-                searchQuery={searchQuery}
-                title="Offcycle"
-                reference={reference}
-            />
+            {category == "Offcycle" ? (
+                <InternshipList
+                    internships={offcycleInternships}
+                    statuses={statuses}
+                    searchQuery={searchQuery}
+                    title="Offcycle"
+                    reference={reference}
+                />
+            ) : (
+                <InternshipList
+                    internships={summerInternships}
+                    statuses={statuses}
+                    searchQuery={searchQuery}
+                    title="Summer"
+                    reference={reference}
+                />
+            )}
         </>
     );
 }
