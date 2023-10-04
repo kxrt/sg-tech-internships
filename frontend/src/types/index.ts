@@ -27,3 +27,5 @@ export type Statuses = {
 };
 
 export type Status = (typeof STATUSES)[number];
+
+export type Category = "Summer" | "Offcycle";

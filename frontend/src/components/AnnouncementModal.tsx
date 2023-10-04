@@ -51,6 +51,12 @@ const AnnoucementModal = () => {
                             button
                         </Text>
                     </List.Item>
+                    <List.Item>
+                        <Text>
+                            View internships by category by clicking the tabs on
+                            the top
+                        </Text>
+                    </List.Item>
                 </List>
                 {/* </Stack> */}
                 <Divider />

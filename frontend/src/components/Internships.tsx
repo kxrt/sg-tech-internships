@@ -3,13 +3,15 @@ import { useEffect, useState } from "react";
 import { SearchBar } from "./SearchBar";
 import InternshipList from "./InternshipList";
 import { useAuthStore } from "../stores/AuthStore";
-import { Internship, Statuses } from "../types";
+import { Category, Internship, STATUSES, Statuses } from "../types";
 import { toast } from "react-toastify";
 
 export function Internships({
     reference,
+    category,
 }: {
     reference?: React.MutableRefObject<HTMLDivElement | null> | null;
+    category: Category;
 }) {
     const [summerInternships, setSummerInternships] = useState<Internship[]>(
         []
@@ -114,6 +116,24 @@ export function Internships({
                     a.company.localeCompare(b.company)
                 )
             );
+        } else if (sortBy == "My Applications") {
+            const sortByStatus = (a: Internship, b: Internship) => {
+                const aLen = statuses[a.internship_id]?.length || 0;
+                const bLen = statuses[b.internship_id]?.length || 0;
+                if (aLen > 0 && bLen > 0) {
+                    return (
+                        STATUSES.indexOf(statuses[b.internship_id][bLen - 1]) -
+                        STATUSES.indexOf(statuses[a.internship_id][aLen - 1])
+                    );
+                } else if (aLen > 0 && bLen == 0) {
+                    return -1;
+                } else if (bLen > 0 && aLen == 0) {
+                    return 1;
+                }
+                return 0;
+            };
+            setSummerInternships(summerInternshipsCopy.sort(sortByStatus));
+            setOffcycleInternships(offcycleInternshipsCopy.sort(sortByStatus));
         }
         // prevent infinite loop of updates
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -138,22 +158,26 @@ export function Internships({
                 >
                     <option value="Date">Most Recent</option>
                     <option value="A-Z">A-Z</option>
+                    <option value="My Applications">My Applications</option>
                 </select>
             </div>
-            <InternshipList
-                internships={summerInternships}
-                statuses={statuses}
-                searchQuery={searchQuery}
-                title="Summer"
-                reference={reference}
-            />
-            <InternshipList
-                internships={offcycleInternships}
-                statuses={statuses}
-                searchQuery={searchQuery}
-                title="Offcycle"
-                reference={reference}
-            />
+            {category == "Offcycle" ? (
+                <InternshipList
+                    internships={offcycleInternships}
+                    statuses={statuses}
+                    searchQuery={searchQuery}
+                    title="Offcycle"
+                    reference={reference}
+                />
+            ) : (
+                <InternshipList
+                    internships={summerInternships}
+                    statuses={statuses}
+                    searchQuery={searchQuery}
+                    title="Summer"
+                    reference={reference}
+                />
+            )}
         </>
     );
 }
