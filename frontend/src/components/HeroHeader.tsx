@@ -111,7 +111,7 @@ export function Header({
 
       <div className={classes.inner}>
         <Title className={classes.title}>
-          🇸🇬 Summer 2024{" "}
+          🇸🇬 2024 Tech{" "}
           <Text component="span" className={classes.highlight} inherit>
             Internships
           </Text>{" "}
@@ -120,20 +120,8 @@ export function Header({
 
         <Container p={0} size={600}>
           <Text size="lg" color="dimmed" className={classes.description}>
-            Access and share the latest <b>summer 2024</b> internship
-            opportunities in Singapore!
-            {/* For <b>off-cycle</b> opportunities,{" "}
-            <a
-              onClick={handleScroll}
-              style={{
-                textDecoration: "underline",
-                color: "#6161ff",
-                cursor: "pointer",
-              }}
-            >
-              click here
-            </a>
-            . */}
+            Access and share the latest <b>summer/offcycle 2024</b> software
+            engineering and other tech internship opportunities in Singapore!
           </Text>
         </Container>
 
