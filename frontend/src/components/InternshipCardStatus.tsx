@@ -130,19 +130,6 @@ const InternshipCardStatus = ({
                 searchable
                 clearable
                 withinPortal
-                styles={(theme) => ({
-                    item: {
-                        "&[data-selected]": {
-                            "&, &:hover": {
-                                backgroundColor: theme.colors.violet[1],
-                                color: theme.black,
-                            },
-                        },
-
-                        // applies styles to hovered item (with mouse or keyboard)
-                        "&[data-hovered]": {},
-                    },
-                })}
             ></MultiSelect>
         </Group>
     ) : (

@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { SearchBar } from "./SearchBar";
 import InternshipList from "./InternshipList";
 import { useAuthStore } from "../stores/AuthStore";
-import { SortBy } from "../types";
+import { Category, SortBy } from "../types";
 import { toast } from "react-toastify";
 import { useInternshipStore } from "../stores/InternshipStore";
 import { useSearchParams } from "react-router-dom";
 import { getLastUpdated, sortInternships } from "../utils/InternshipUtils";
+import { Box, Center, Select } from "@mantine/core";
 
 export function Internships({
     reference,
@@ -73,35 +74,39 @@ export function Internships({
 
     return (
         <>
-            <div className="top-interactive">
-                <SearchBar
-                    searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}
-                />
-            </div>
-            <div>
+            <SearchBar
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+            />
+            <Box pt={"lg"}>
                 Last updated:{" "}
                 {getLastUpdated(newSummerInternships, newOffcycleInternships)}
-            </div>
-
-            <div className="landing-select-group">
-                <label htmlFor="sortBy">Sort By</label>
-                <select
-                    className="landing-select"
-                    onChange={(e) => {
+            </Box>
+            <Center pt={"lg"}>
+                <Select
+                    label="Sort By"
+                    searchable
+                    size="md"
+                    nothingFound="No options"
+                    defaultValue={"date"}
+                    data={[
+                        { value: "date", label: "Most Recent" },
+                        { value: "company-name", label: "A-Z" },
+                        { value: "status", label: "My Applications" },
+                    ]}
+                    value={searchParams.get("sort-by") || "date"}
+                    onChange={(value: Category) => {
                         const updatedSearchParams = new URLSearchParams(
                             searchParams.toString()
                         );
-                        updatedSearchParams.set("sort-by", e.target.value);
+                        updatedSearchParams.set("sort-by", value);
                         setSearchParams(updatedSearchParams.toString());
                     }}
-                    value={searchParams.get("sort-by") || "date"}
-                >
-                    <option value="date">Most Recent</option>
-                    <option value="company-name">A-Z</option>
-                    <option value="status">My Applications</option>
-                </select>
-            </div>
+                    sx={{
+                        input: { "&:hover": { border: "2px solid #6161ff" } },
+                    }}
+                />
+            </Center>
             {searchParams.get("category") == "Offcycle" ? (
                 <InternshipList
                     internships={sortInternships(
