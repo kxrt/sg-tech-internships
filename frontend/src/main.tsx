@@ -66,6 +66,34 @@ const theme = {
                 }),
             },
         },
+        Select: {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-ignore
+            styles: (theme) => ({
+                item: {
+                    "&[data-selected]": {
+                        "&, &:hover": {
+                            backgroundColor: theme.colors.violet[1],
+                            color: theme.black,
+                        },
+                    },
+                },
+            }),
+        },
+        Input: {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-ignore
+            styles: (theme) => ({
+                input: {
+                    "&:focus, &:focus-within, &:focus-visible": {
+                        borderColor: "#6161ff",
+                    },
+                    "::selection": {
+                        background: theme.colors.violet[1],
+                    },
+                },
+            }),
+        },
     },
 };
 

@@ -15,6 +15,7 @@ import { useAuthStore } from "../stores/AuthStore";
 import axios from "axios";
 import { toast } from "react-toastify";
 import ReactGA from "react-ga4";
+import { useInternshipStore } from "../stores/InternshipStore";
 
 const COLOR_MAP: { [key: string]: string } = {
     Pending: "gray",
@@ -56,12 +57,17 @@ const InternshipCardStatus = ({
     const [value, setValue] = useState<Status[]>([]);
 
     const user = useAuthStore((state) => state.user);
+    const updateStatus = useInternshipStore((state) => state.updateStatus);
 
     useEffect(() => {
         setValue(status);
     }, [status]);
 
     const handleStatusUpdate = async () => {
+        // avoid making api call if no changes were made
+        if (status == value) {
+            return;
+        }
         const token = await user?.getIdToken();
         ReactGA.event({
             category: "User",
@@ -86,6 +92,7 @@ const InternshipCardStatus = ({
                     position: "bottom-right",
                     autoClose: 1000,
                 });
+                updateStatus(internship_id, value);
             })
             .catch(() => {
                 toast.error("Error updating status", {
@@ -111,7 +118,7 @@ const InternshipCardStatus = ({
                 <Image src={SaveIcon} height={16} width={16} />
             </Button>
             <MultiSelect
-                data={STATUSES.slice(1)}
+                data={STATUSES}
                 value={value}
                 onChange={(newValue: Status[]) => {
                     newValue.sort(
@@ -123,19 +130,6 @@ const InternshipCardStatus = ({
                 searchable
                 clearable
                 withinPortal
-                styles={(theme) => ({
-                    item: {
-                        "&[data-selected]": {
-                            "&, &:hover": {
-                                backgroundColor: theme.colors.violet[1],
-                                color: theme.black,
-                            },
-                        },
-
-                        // applies styles to hovered item (with mouse or keyboard)
-                        "&[data-hovered]": {},
-                    },
-                })}
             ></MultiSelect>
         </Group>
     ) : (

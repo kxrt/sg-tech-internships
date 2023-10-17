@@ -1,18 +1,18 @@
 import { Center, SimpleGrid } from "@mantine/core";
 import InternshipCard from "./InternshipCard";
-import { Internship, Statuses } from "../types";
+import { Category, InternshipWithStatus } from "../types";
 
 type InternshipListProps = {
-    internships: Internship[];
-    statuses: Statuses;
-    title: string;
+    internships: InternshipWithStatus[];
+    // statuses: Statuses;
+    title: Category;
     searchQuery: string;
     reference?: React.MutableRefObject<null | HTMLDivElement> | null;
 };
 
 const InternshipList = ({
     internships,
-    statuses,
+    // statuses,
     title,
     searchQuery,
     reference,
@@ -50,11 +50,11 @@ const InternshipList = ({
                                 <InternshipCard
                                     internship={internship}
                                     key={idx}
-                                    status={
-                                        statuses[internship.internship_id]
-                                            ? statuses[internship.internship_id]
-                                            : []
-                                    }
+                                    // status={
+                                    //     statuses[internship.internship_id]
+                                    //         ? statuses[internship.internship_id]
+                                    //         : []
+                                    // }
                                 />
                             );
                         })}
