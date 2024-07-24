@@ -1,6 +1,6 @@
 # Summer 2024 Tech Internships - Singapore
 
-This repository hosts the frontend (React, Vite) and backend (Go) code for the [website](https://techinternships.kxrt.me) (down for maintenance) that displays data from the [main repository](https://github.com/kxrt/Singapore-Summer2024-TechInternships).
+This repository hosts the frontend (React, Vite) and backend (Go) code for the website (down for maintenance) that displays data from the [main repository](https://github.com/kxrt/Singapore-Summer2024-TechInternships).
 
 ## Quickstart
 
